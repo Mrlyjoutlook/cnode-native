@@ -2,16 +2,17 @@ import { applyMiddleware, compose, createStore } from 'redux';
 import thunk from 'redux-thunk';
 import createSagaMiddleware from 'redux-saga';
 import reducers from '../modules';
-import rootSaga from '../saga';
+import request from '../middleware/requestMiddleware';
+// import rootSaga from '../saga';
 
 export default (initialState = {}) => {
   // create saga middleware
-  const sagaMiddleware = createSagaMiddleware();
+  // const sagaMiddleware = createSagaMiddleware();
   // go saga
-  sagaMiddleware.run(rootSaga);
+  // sagaMiddleware.run(rootSaga);
 
   // Middleware Configuration
-  const middleware = [thunk, requestMiddleware, sagaMiddleware];
+  const middleware = [thunk, request];
 
   // Store Enhancers
   const enhancers = [];

@@ -1,5 +1,5 @@
 import { fromJS, Map } from 'immutable';
-// import * as actions from '../actions/userState';
+// import * as actions from './appActions';
 
 const initialState = fromJS({
   direction: 'x',

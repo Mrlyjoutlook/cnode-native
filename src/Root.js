@@ -4,8 +4,12 @@ import { StackNavigator } from 'react-navigation';
 import Home from './scene/Home';
 import Admin from './scene/Admin';
 import Topic from './scene/Topic';
+import createStore from './redux/store';
 
 require('moment').locale('zh-cn');
+
+// create store
+createStore();
 
 const Navigator = StackNavigator(
   {
