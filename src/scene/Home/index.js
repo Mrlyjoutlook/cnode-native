@@ -1,10 +1,13 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { View, Text, Button, TouchableOpacity, StyleSheet, StatusBar, FlatList } from 'react-native';
 import ScrollableTabView, { DefaultTabBar } from 'react-native-scrollable-tab-view';
+import { is } from 'immutable';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { GET_LIST } from '../../redux/actions';
 // import TabNav from '../../common/TabNav';
 import ListItem from '../../common/ListItem';
-import theme from '../../config/styles' ;
+import theme from '../../config/styles';
 
 const styles =  StyleSheet.create({
   navLeft: {
@@ -14,9 +17,7 @@ const styles =  StyleSheet.create({
     fontWeight: 'bold',
   },
   navRight: {
-    fontSize: 16,
     marginRight: 15,
-    fontWeight: 'bold',
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
@@ -37,7 +38,7 @@ const styles =  StyleSheet.create({
   },
 });
 
-class Home extends PureComponent {
+class Home extends Component {
 
   static navigationOptions = ({ navigation }) => ({
     headerLeft: (
@@ -56,6 +57,16 @@ class Home extends PureComponent {
       borderWidth: 0,
     }
   })
+
+  componentDidMount() {
+    const { dispatch } = this.props;
+    dispatch({ type:GET_LIST, tab: 'all' });
+  }
+
+  shouldComponentUpdate(nextProps) {
+    const { tab, listData } = nextProps;
+    return !is(tab, this.props.tab) || !is(listData, this.props.listData);
+  }
 
   state = {
     data: [
@@ -82,6 +93,7 @@ class Home extends PureComponent {
   }
 
   render() {
+    const { listData, tab } = this.props;
     return (
       <View style={styles.content}>
         <StatusBar
@@ -101,7 +113,7 @@ class Home extends PureComponent {
         >
           <FlatList
             tabLabel="全部"
-            data={this.state.data}
+            data={listData.get(tab).toArray()}
             renderItem={({item}) => <ListItem data={item} />}
           />
           <FlatList
@@ -130,4 +142,11 @@ class Home extends PureComponent {
   }
 }
 
-export default Home;
+function mapStateToProps(state) {
+  return {
+    tab: state.appState.getIn(['listInfo', 'tab']),
+    listData: state.appState.get('listData'),
+  }
+}
+
+export default connect(mapStateToProps)(Home);

@@ -78,30 +78,32 @@ const styles = StyleSheet.create({
 class ListItem extends PureComponent {
 
   render() {
-    const { data, } = this.props;
+    const { data } = this.props;
+    const { tab, good, top, author, title, create_at, visit_count, reply_count } = data.toObject();
+    const { avatar_url, loginname } = author.toObject();
     return (
       <TouchableHighlight>
         <View style={styles.content}>
           <View style={styles.row_1}>
-            { data.tab && <View style={styles.label}><Text style={styles.label_font}>{getLabelType(data.tab)}</Text></View> }
-            { data.good && <View style={[styles.label, { backgroundColor: 'red' }]}><Text style={styles.label_font}>{getLabelType('good')}</Text></View> }
-            { data.top && <View style={[styles.label, { backgroundColor: 'green' }]}><Text style={styles.label_font}>{getLabelType('top')}</Text></View> }
+            { tab && <View style={styles.label}><Text style={styles.label_font}>{getLabelType(tab)}</Text></View> }
+            { good && <View style={[styles.label, { backgroundColor: 'red' }]}><Text style={styles.label_font}>{getLabelType('good')}</Text></View> }
+            { top && <View style={[styles.label, { backgroundColor: 'green' }]}><Text style={styles.label_font}>{getLabelType('top')}</Text></View> }
           </View>
           <View style={styles.row_2}>
             <Image
               style={styles.image}
-              source={{ uri: data.author.avatar_url }}
+              source={{ uri: avatar_url }}
             />
-            <Text numberOfLines={1} style={styles.textTitle}>{data.title}</Text>
+            <Text numberOfLines={1} style={styles.textTitle}>{title}</Text>
           </View>
           <View style={styles.row_3}>
-            <Text style={[styles.textDefault, styles.textLarge]}>{data.author.loginname}</Text>
-            <Text style={[styles.textDefault]}>{moment(data.create_at).fromNow()}</Text>
+            <Text style={[styles.textDefault, styles.textLarge]}>{loginname}</Text>
+            <Text style={[styles.textDefault]}>{moment(create_at).fromNow()}</Text>
             <View style={styles.row_3_1}>
               <Icon name="md-eye" size={15} color="#484545" />
-              <Text style={[styles.textDefault]}>{data.visit_count}</Text>
+              <Text style={[styles.textDefault]}>{visit_count}</Text>
               <Icon name="ios-chatbubbles" size={15} color="#484545" />
-              <Text style={[styles.textDefault]}>{data.reply_count}</Text>
+              <Text style={[styles.textDefault]}>{reply_count}</Text>
             </View>
           </View>
         </View>

@@ -3,16 +3,13 @@ import thunk from 'redux-thunk';
 import createSagaMiddleware from 'redux-saga';
 import reducers from '../modules';
 import request from '../middleware/requestMiddleware';
-// import rootSaga from '../saga';
 
 export default (initialState = {}) => {
   // create saga middleware
-  // const sagaMiddleware = createSagaMiddleware();
-  // go saga
-  // sagaMiddleware.run(rootSaga);
+  const sagaMiddleware = createSagaMiddleware();
 
   // Middleware Configuration
-  const middleware = [thunk, request];
+  const middleware = [thunk, request, sagaMiddleware];
 
   // Store Enhancers
   const enhancers = [];
@@ -27,5 +24,8 @@ export default (initialState = {}) => {
     ),
   );
 
-  return store;
+  return {
+    store,
+    run: sagaMiddleware.run
+  };
 };
