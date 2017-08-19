@@ -77,12 +77,19 @@ const styles = StyleSheet.create({
 
 class ListItem extends PureComponent {
 
+  handleOnPress = () => {
+    return () => {
+      this.props.onPress()
+    }
+  }
+
   render() {
-    const { data, onPress } = this.props;
+    const { data, key } = this.props;
     const { tab, good, top, author, title, create_at, visit_count, reply_count } = data.toObject();
     const { avatar_url, loginname } = author.toObject();
+    console.log(key)
     return (
-      <TouchableHighlight onPress={onPress} underlayColor="#ebebeb">
+      <TouchableHighlight onPress={this.handleOnPress()} underlayColor="#ebebeb">
         <View style={styles.content}>
           <View style={styles.row_1}>
             { tab && <View style={styles.label}><Text style={styles.label_font}>{getLabelType(tab)}</Text></View> }

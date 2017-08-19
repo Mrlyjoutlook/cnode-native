@@ -6,7 +6,10 @@ import Topic from './scene/Topic';
 const AppNavigator = StackNavigator({
   Home: { screen: Home },
   Admin: { screen: Admin },
-  Topic: { screen: Topic }
+  Topic: {
+    path: 'topic/:id',
+    screen: Topic,
+  }
 });
 
 export default AppNavigator;

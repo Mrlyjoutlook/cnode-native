@@ -86,10 +86,11 @@ class Home extends Component {
     ],
   }
 
-  handleClick = () => {
+  handleClick = (id) => {
     const { dispatch } = this.props;
     dispatch(push({
-      name: 'Topic'
+      name: 'Topic',
+      params: { id }
     }));
   }
 
@@ -122,7 +123,7 @@ class Home extends Component {
   }
 
   render() {
-    const { listData, tab, navigation } = this.props;
+    const { listData, tab } = this.props;
     return (
       <View style={styles.content}>
         <StatusBar
@@ -144,7 +145,7 @@ class Home extends Component {
           <FlatList
             tabLabel="全部"
             data={listData.get(tab).toArray()}
-            renderItem={({item}) => <ListItem data={item} onPress={this.handleClick} />}
+            renderItem={({item, i}) => <ListItem key={i} data={item} onPress={this.handleClick} />}
           />
           <FlatList
             tabLabel="精华"

@@ -1,16 +1,26 @@
 import React, { PureComponent } from 'react';
 import { View, Text } from 'react-native';
+import HTMLView from 'react-native-htmlview';
+import theme from '../../config/styles';
 
 class Topic extends PureComponent {
 
   static navigationOptions = {
-    title: 'Welcomeaa',
+    title: '详情',
+    headerStyle: {
+      backgroundColor: theme.backgroundColor,
+      borderWidth: 0,
+    }
   };
 
   render() {
+    const { navigation, htmlContent } = this.props;
+    console.log(navigation)
     return (
       <View>
-        <Text>aaaa</Text>
+        <HTMLView
+          value={htmlContent}
+        />
       </View>
     );
   }
