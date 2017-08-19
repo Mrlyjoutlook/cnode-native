@@ -1,12 +1,10 @@
 import React, { PureComponent } from 'react'
 import { StatusBar, View } from 'react-native'
-import { StackNavigator } from 'react-navigation';
-import { Provider } from 'react-redux';
-import Home from './scene/Home';
-import Admin from './scene/Admin';
-import Topic from './scene/Topic';
+import { Provider, connect } from 'react-redux';
+import { addNavigationHelpers } from 'react-navigation';
 import createStore from './redux/store';
 import rootSaga from './redux/saga';
+import AppNavigator from './router';
 
 require('moment').locale('zh-cn');
 
@@ -16,22 +14,28 @@ const { store, run } = createStore();
 // go saga
 run(rootSaga);
 
-const Navigator = StackNavigator(
-  {
-    Home: { screen: Home },
-    Admin: { screen: Admin }
-  }, {
-    Topic: {
-      screen: Topic,
-    }
+class App extends PureComponent {
+  render() {
+    return (
+      <AppNavigator navigation={addNavigationHelpers({
+        dispatch: this.props.dispatch,
+        state: this.props.routerState,
+      })} />
+    );
   }
-);
+}
+
+const mapStateToProps = (state) => ({
+  routerState: state.routerState
+});
+
+const AppWithNavigationState = connect(mapStateToProps)(App);
 
 class Root extends PureComponent {
   render() {
     return (
       <Provider store={store}>
-        <Navigator/>
+        <AppWithNavigationState />
       </Provider>
     )
   }

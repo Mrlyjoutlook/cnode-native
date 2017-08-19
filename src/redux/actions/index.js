@@ -1,7 +1,21 @@
+import { NavigationActions } from 'react-navigation';
 import api from '../../config/api';
+
+/**
+|--------------------------------------------------
+| action type
+|--------------------------------------------------
+*/
 
 export const GET_LIST = 'GET_LIST';
 export const REQUEST_LIST = 'REQUEST_LIST';
+export const CHANGE_TAB = 'CHANGE_TAB';
+
+/**
+|--------------------------------------------------
+| create action
+|--------------------------------------------------
+*/
 
 export const getList = (type = 'all') => (dispatch) => {
   return dispatch({
@@ -14,3 +28,16 @@ export const getList = (type = 'all') => (dispatch) => {
     },
   });
 };
+
+/**
+|--------------------------------------------------
+| 路由action
+|--------------------------------------------------
+*/
+
+export const push = ({ name = '', params = {} }) =>  NavigationActions.navigate({
+  routeName: name,
+  params,
+});
+
+export const goBack = (key) => NavigationActions.back({ key });

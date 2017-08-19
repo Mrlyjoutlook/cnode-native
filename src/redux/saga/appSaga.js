@@ -1,5 +1,5 @@
 import { put, select, takeLatest } from 'redux-saga/effects';
-import { GET_LIST, REQUEST_LIST, getList } from '../actions';
+import { GET_LIST, REQUEST_LIST, getList, CHANGE_TAB } from '../actions';
 
 function* watchList({ tab }) {
   // const curType = yield select(state => state.appState.getIn(['listInfo', 'type']));
@@ -19,6 +19,11 @@ function* watchList({ tab }) {
   }
 }
 
+function* watchTab(tab) {
+  yield put({ type: CHANGE_TAB, tab });
+}
+
 export default function* appTask() {
   yield takeLatest(GET_LIST, watchList);
+  // yield takeLatest(CHANGE_TAB, watchTab);
 }

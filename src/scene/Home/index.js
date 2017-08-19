@@ -4,8 +4,7 @@ import { View, Text, Button, TouchableOpacity, StyleSheet, StatusBar, FlatList }
 import ScrollableTabView, { DefaultTabBar } from 'react-native-scrollable-tab-view';
 import { is } from 'immutable';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { GET_LIST } from '../../redux/actions';
-// import TabNav from '../../common/TabNav';
+import { GET_LIST, CHANGE_TAB, push } from '../../redux/actions';
 import ListItem from '../../common/ListItem';
 import theme from '../../config/styles';
 
@@ -22,7 +21,7 @@ const styles =  StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    width: 60
+    width: 60,
   },
   content: {
 		alignItems: 'center',
@@ -88,12 +87,42 @@ class Home extends Component {
   }
 
   handleClick = () => {
-    const { navigate } = this.props.navigation;
-    navigate('Admin');
+    const { dispatch } = this.props;
+    dispatch(push({
+      name: 'Topic'
+    }));
+  }
+
+  handleOnChangeTab = (val) => {
+    const { dispatch, listData } = this.props;
+    const { i } = val;
+    let str = 'all';
+    switch (i){
+      case 0:
+        str = 'all';
+        break;
+      case 1:
+        str = 'good';
+        break;
+      case 2:
+        str = 'share';
+        break;
+      case 3:
+        str = 'ask';
+        break;
+      case 4:
+        str = 'job';
+        break;
+    }
+    if (listData.get(str).size === 0) {
+      dispatch({ type:GET_LIST, tab: str });
+    } else {
+      dispatch({ type:CHANGE_TAB, tab: str });
+    }
   }
 
   render() {
-    const { listData, tab } = this.props;
+    const { listData, tab, navigation } = this.props;
     return (
       <View style={styles.content}>
         <StatusBar
@@ -102,39 +131,40 @@ class Home extends Component {
         <ScrollableTabView
           // initialPage={0}
           renderTabBar={() => <DefaultTabBar />}
+          onChangeTab={this.handleOnChangeTab}
           tabBarUnderlineStyle={{
             backgroundColor: '#ace9f1',
           }} // 下划线样式
           tabBarBackgroundColor={theme.backgroundColor} // 背景色
-          tabBarActiveTextColor="#ffffff"  // 选中字体样式
-          tabBarInactiveTextColor="#ace9f1"  // 未选中字体样式
+          tabBarActiveTextColor="#ffffff"  // 选中字体颜色
+          tabBarInactiveTextColor="#ace9f1"  // 未选中字体颜色
           tabBarTextStyle={{fontSize: 14}} // 字体默认样式
           style={{borderWidth: 0}}
         >
           <FlatList
             tabLabel="全部"
             data={listData.get(tab).toArray()}
-            renderItem={({item}) => <ListItem data={item} />}
+            renderItem={({item}) => <ListItem data={item} onPress={this.handleClick} />}
           />
           <FlatList
             tabLabel="精华"
-            data={[{key: 'a'}, {key: 'b'}]}
-            renderItem={({item}) => <View style={styles.tabView}><Text>{item.key}</Text></View>}
+            data={listData.get(tab).toArray()}
+            renderItem={({item}) => <ListItem data={item} />}
           />
           <FlatList
             tabLabel="分享"
-            data={[{key: 'a'}, {key: 'b'}]}
-            renderItem={({item}) => <View style={styles.tabView}><Text>{item.key}</Text></View>}
+            data={listData.get(tab).toArray()}
+            renderItem={({item}) => <ListItem data={item} />}
           />
           <FlatList
             tabLabel="回答"
-            data={[{key: 'a'}, {key: 'b'}]}
-            renderItem={({item}) => <View style={styles.tabView}><Text>{item.key}</Text></View>}
+            data={listData.get(tab).toArray()}
+            renderItem={({item}) => <ListItem data={item} />}
           />
           <FlatList
             tabLabel="招聘"
-            data={[{key: 'a'}, {key: 'b'}]}
-            renderItem={({item}) => <View style={styles.tabView}><Text>{item.key}</Text></View>}
+            data={listData.get(tab).toArray()}
+            renderItem={({item}) => <ListItem data={item} />}
           />
         </ScrollableTabView>
       </View>

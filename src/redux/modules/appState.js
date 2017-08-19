@@ -1,5 +1,5 @@
 import { fromJS, Map } from 'immutable';
-import { REQUEST_LIST } from '../actions';
+import { REQUEST_LIST, CHANGE_TAB } from '../actions';
 
 const initialState = fromJS({
   listInfo: {
@@ -25,6 +25,8 @@ export default function (state = initialState, action) {
       return state.setIn(['listData', action.tab], fromJS(action.data))
         .setIn(['listInfo', 'loading'], false)
         .setIn(['listInfo', 'tab'], action.tab);
+    case CHANGE_TAB:
+      return state.setIn(['listInfo', 'tab'], action.tab);
     default:
       return state;
   }
