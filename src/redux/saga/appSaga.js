@@ -1,5 +1,13 @@
 import { put, select, takeLatest } from 'redux-saga/effects';
-import { GET_LIST, REQUEST_LIST, getList, CHANGE_TAB } from '../actions';
+import {
+  GET_LIST,
+  REQUEST_LIST,
+  getList,
+  CHANGE_TAB,
+  GET_TOPIC,
+  REQUEST_TOPIC,
+  getTopic
+} from '../actions';
 
 function* watchList({ tab }) {
   // const curType = yield select(state => state.appState.getIn(['listInfo', 'type']));
@@ -19,6 +27,19 @@ function* watchList({ tab }) {
   }
 }
 
+function* watchTopic({id}) {
+  try {
+    const { success, data } = yield put.resolve(getTopic(id));
+    if (success) {
+      yield put({ type: `${REQUEST_TOPIC}_OK`, data });
+    } else {
+      yield put({ type: `${REQUEST_TOPIC}_FAIL`, data });
+    }
+  } catch (e) {
+      yield put({ type: `${REQUEST_TOPIC}_FAIL`, message: e.message });
+  }
+}
+
 function* watchTab(tab) {
   yield put({ type: CHANGE_TAB, tab });
 }
@@ -26,4 +47,5 @@ function* watchTab(tab) {
 export default function* appTask() {
   yield takeLatest(GET_LIST, watchList);
   // yield takeLatest(CHANGE_TAB, watchTab);
+  yield takeLatest(GET_TOPIC, watchTopic);
 }
