@@ -7,7 +7,7 @@ import theme from '../../config/styles';
 import { GET_TOPIC } from '../../redux/actions';
 
 class Topic extends PureComponent {
-
+  
   static navigationOptions = {
     title: '详情',
     headerRight: (
