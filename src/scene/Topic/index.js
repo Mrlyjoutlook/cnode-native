@@ -3,6 +3,7 @@ import { View, Text, ScrollView, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 import HtmlView from '../../common/HtmlView';
 import TopicAuthor from '../../common/TopicAuthor';
+import Comment from '../../common/Comment'
 import theme from '../../config/styles';
 import { GET_TOPIC } from '../../redux/actions';
 
@@ -52,7 +53,7 @@ class Topic extends PureComponent {
 
   render() {
     const { navigation, topic } = this.props;
-    const { title, content, author: { loginname, avatar_url }, reply_count, visit_count, create_at } = topic.toObject();
+    const { title, content, author: { loginname, avatar_url }, reply_count, visit_count, create_at, replies } = topic.toObject();
     return (
       <ScrollView>
         <TopicAuthor
@@ -68,6 +69,11 @@ class Topic extends PureComponent {
         <HtmlView
           htmlContent={content}
         />
+        <View>
+          {
+            replies.map((item, i) => <Comment key={i} data={item} />)
+          }
+        </View>
       </ScrollView>
     );
   }
@@ -75,7 +81,7 @@ class Topic extends PureComponent {
 
 function mapStateToProps(state) {
   return {
-    topic: state.appState.get('topic')
+    topic: state.appState.get('topic'),
   }
 }
 

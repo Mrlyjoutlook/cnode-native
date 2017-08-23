@@ -20,7 +20,8 @@ const initialState = fromJS({
     author: { loginname: '', avatar_url: '' },
     reply_count: '',
     visit_count: '',
-    create_at: ''
+    create_at: '',
+    replies: []
   }
 });
 

@@ -40,6 +40,19 @@ function* watchTopic({id}) {
   }
 }
 
+// function* watchCommon() {
+//   try {
+//     const { success, data } = yield put.resolve(getTopic(id));
+//     if (success) {
+//       yield put({ type: `${REQUEST_TOPIC}_OK`, data });
+//     } else {
+//       yield put({ type: `${REQUEST_TOPIC}_FAIL`, data });
+//     }
+//   } catch (e) {
+//       yield put({ type: `${REQUEST_TOPIC}_FAIL`, message: e.message });
+//   }
+// }
+
 function* watchTab(tab) {
   yield put({ type: CHANGE_TAB, tab });
 }
