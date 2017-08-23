@@ -52580,7 +52580,7 @@ var _store = require(409            ); // 409 = ./redux/store
 
 var _store2 = babelHelpers.interopRequireDefault(_store);
 
-var _saga = require(609           ); // 609 = ./redux/saga
+var _saga = require(610           ); // 610 = ./redux/saga
 
 var _saga2 = babelHelpers.interopRequireDefault(_saga);
 
@@ -61616,7 +61616,7 @@ var _modules = require(427         ); // 427 = ../modules
 
 var _modules2 = babelHelpers.interopRequireDefault(_modules);
 
-var _requestMiddleware = require(606                              ); // 606 = ../middleware/requestMiddleware
+var _requestMiddleware = require(607                              ); // 607 = ../middleware/requestMiddleware
 
 var _requestMiddleware2 = babelHelpers.interopRequireDefault(_requestMiddleware);
 
@@ -78407,7 +78407,7 @@ var _TopicAuthor = require(605                       ); // 605 = ../../common/To
 
 var _TopicAuthor2 = babelHelpers.interopRequireDefault(_TopicAuthor);
 
-var _Comment = require(611                   ); // 611 = ../../common/Comment
+var _Comment = require(606                   ); // 606 = ../../common/Comment
 
 var _Comment2 = babelHelpers.interopRequireDefault(_Comment);
 
@@ -78986,27 +78986,28 @@ var Comment = function (_Component) {
             }),
             _react2.default.createElement(
               _reactNative.Text,
-              { style: [styles.textDefault], __source: {
+              {
+                __source: {
                   fileName: _jsxFileName,
                   lineNumber: 35
                 }
               },
-              回复
+              '\u56DE\u590D'
             ),
             _react2.default.createElement(_Ionicons2.default, { name: 'md-thumbs-up', size: 15, color: '#484545', __source: {
                 fileName: _jsxFileName,
                 lineNumber: 36
               }
             }),
-            '>',
             _react2.default.createElement(
               _reactNative.Text,
-              { style: [styles.textDefault], __source: {
+              {
+                __source: {
                   fileName: _jsxFileName,
                   lineNumber: 37
                 }
               },
-              点赞
+              '\u70B9\u8D5E'
             )
           )
         )
@@ -79017,12 +79018,12 @@ var Comment = function (_Component) {
 }(_react.Component);
 
 exports.default = Comment;
-}, 611, null, "myappfb/src/common/Comment/index.js");
+}, 606, null, "myappfb/src/common/Comment/index.js");
 __d(/* myappfb/src/redux/middleware/requestMiddleware.js */function(global, require, module, exports) {Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var regeneratorRuntime = require(607                  ); // 607 = regenerator-runtime
+var regeneratorRuntime = require(608                  ); // 608 = regenerator-runtime
 
 exports.default = function (_ref) {
   var dispatch = _ref.dispatch,
@@ -79093,7 +79094,7 @@ exports.default = function (_ref) {
     };
   };
 };
-}, 606, null, "myappfb/src/redux/middleware/requestMiddleware.js");
+}, 607, null, "myappfb/src/redux/middleware/requestMiddleware.js");
 __d(/* regenerator-runtime/runtime-module.js */function(global, require, module, exports) {
 var g = typeof global === "object" ? global : typeof window === "object" ? window : typeof self === "object" ? self : this;
 
@@ -79103,7 +79104,7 @@ var oldRuntime = hadRuntime && g.regeneratorRuntime;
 
 g.regeneratorRuntime = undefined;
 
-module.exports = require(608        ); // 608 = ./runtime
+module.exports = require(609        ); // 609 = ./runtime
 
 if (hadRuntime) {
   g.regeneratorRuntime = oldRuntime;
@@ -79114,7 +79115,7 @@ if (hadRuntime) {
     g.regeneratorRuntime = undefined;
   }
 }
-}, 607, null, "regenerator-runtime/runtime-module.js");
+}, 608, null, "regenerator-runtime/runtime-module.js");
 __d(/* regenerator-runtime/runtime.js */function(global, require, module, exports) {
 
 !function (global) {
@@ -79673,7 +79674,7 @@ __d(/* regenerator-runtime/runtime.js */function(global, require, module, export
     }
   };
 }(typeof global === "object" ? global : typeof window === "object" ? window : typeof self === "object" ? self : this);
-}, 608, null, "regenerator-runtime/runtime.js");
+}, 609, null, "regenerator-runtime/runtime.js");
 __d(/* myappfb/src/redux/saga/index.js */function(global, require, module, exports) {Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -79681,16 +79682,16 @@ exports.default = rootSaga;
 
 var _effects = require(425                 ); // 425 = redux-saga/effects
 
-var _appSaga = require(610        ); // 610 = ./appSaga
+var _appSaga = require(611        ); // 611 = ./appSaga
 
 var _appSaga2 = babelHelpers.interopRequireDefault(_appSaga);
 
-var regeneratorRuntime = require(607                  ); // 607 = regenerator-runtime
+var regeneratorRuntime = require(608                  ); // 608 = regenerator-runtime
 
 function* rootSaga() {
   yield (0, _effects.all)([(0, _effects.fork)(_appSaga2.default)]);
 }
-}, 609, null, "myappfb/src/redux/saga/index.js");
+}, 610, null, "myappfb/src/redux/saga/index.js");
 __d(/* myappfb/src/redux/saga/appSaga.js */function(global, require, module, exports) {Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -79700,7 +79701,7 @@ var _effects = require(425                 ); // 425 = redux-saga/effects
 
 var _actions = require(431         ); // 431 = ../actions
 
-var regeneratorRuntime = require(607                  ); // 607 = regenerator-runtime
+var regeneratorRuntime = require(608                  ); // 608 = regenerator-runtime
 
 function* watchList(_ref) {
   var tab = _ref.tab;
@@ -79752,7 +79753,7 @@ function* appTask() {
 
   yield (0, _effects.takeLatest)(_actions.GET_TOPIC, watchTopic);
 }
-}, 610, null, "myappfb/src/redux/saga/appSaga.js");
+}, 611, null, "myappfb/src/redux/saga/appSaga.js");
 ;require(83);
 ;require(0);
 //# sourceMappingURL=index.ios.map

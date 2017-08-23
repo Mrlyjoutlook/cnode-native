@@ -71,7 +71,7 @@ class Topic extends PureComponent {
         />
         <View>
           {
-            replies.map((item, i) => <Comment key={i} data={item} />)
+            replies.map((item, i) => <Comment key={i} num={i} data={item} />)
           }
         </View>
       </ScrollView>
