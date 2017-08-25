@@ -72,6 +72,7 @@ class Comment extends Component {
             </Icon>
             <Icon name="md-thumbs-up" size={15} color="#484545">
               <Text>点赞</Text>
+              <Text>{data.ups.length}</Text>
             </Icon>
           </View>
         </View>

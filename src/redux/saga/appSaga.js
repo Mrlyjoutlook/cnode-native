@@ -10,7 +10,6 @@ import {
 } from '../actions';
 
 function* watchList({ tab }) {
-  // const curType = yield select(state => state.appState.getIn(['listInfo', 'type']));
   const listData = yield select(state => state.appState.get('listData'));
   if (true) {
     try {

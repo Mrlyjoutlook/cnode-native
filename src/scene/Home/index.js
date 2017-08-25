@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View, Text, Button, TouchableOpacity, StyleSheet, StatusBar, FlatList } from 'react-native';
+import { View, Text, Button, TouchableHighlight, StyleSheet, StatusBar, FlatList } from 'react-native';
 import ScrollableTabView, { DefaultTabBar } from 'react-native-scrollable-tab-view';
 import { is } from 'immutable';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { GET_LIST, CHANGE_TAB, push } from '../../redux/actions';
 import ListItem from '../../common/ListItem';
+import Badge from '../../common/Badge';
 import theme from '../../config/styles';
 
 const styles =  StyleSheet.create({
@@ -35,11 +36,16 @@ const styles =  StyleSheet.create({
 		backgroundColor: '#EBEBEB',
 		flex: 1
   },
+  badge: {
+    position: 'absolute',
+    left: 10,
+    top: 6
+  }
 });
 
 class Home extends Component {
 
-  static navigationOptions = ({ navigation }) => ({
+  static navigationOptions = ({ navigation: { navigate } }) => ({
     headerLeft: (
       <View>
         <Text style={styles.navLeft}>Cnode中文社区</Text>
@@ -47,8 +53,13 @@ class Home extends Component {
     ),
     headerRight: (
       <View style={styles.navRight}>
-        <Icon name="ios-notifications" size={25} color="#fff" />
-        <Icon name="md-settings" size={25} color="#fff" />
+        <TouchableHighlight>
+          <Icon name="ios-notifications" size={25} color="#fff" />
+        </TouchableHighlight>
+        <Badge text={100} overflowCount={99} customStyle={styles.badge} />
+        <TouchableHighlight onPress={() => navigate('Admin')}>
+          <Icon name="md-settings" size={25} color="#fff" />
+        </TouchableHighlight>
       </View>
     ),
     headerStyle: {
@@ -63,11 +74,18 @@ class Home extends Component {
   }
 
   shouldComponentUpdate(nextProps) {
-    const { tab, listData } = nextProps;
-    return !is(tab, this.props.tab) || !is(listData, this.props.listData);
+    const { listBase, listInfo, listData } = nextProps;
+    return !is(listBase, this.props.listBase) || !is(listInfo, this.props.listInfo) || !is(listData, this.props.listData);
   }
 
   state = {}
+
+  _handleClickSet = () => {
+    const { dispatch } = this.props;
+    dispatch(push({
+      name: 'Admin'
+    }))
+  }
 
   _handleClick = (id) => {
     const { dispatch } = this.props;
@@ -80,7 +98,7 @@ class Home extends Component {
   _handleOnChangeTab = (val) => {
     const { dispatch, listData } = this.props;
     const { i } = val;
-    let str = 'all';
+    let tab = { initialPage: i, tab: 'all' }, str = '';
     switch (i){
       case 0:
         str = 'all';
@@ -98,25 +116,28 @@ class Home extends Component {
         str = 'job';
         break;
     }
-    if (listData.get(str).size === 0) {
-      dispatch({ type:GET_LIST, tab: str });
+    tab.tab = str;
+    if (listData.get(tab.tab).size === 0) {
+      dispatch({ type:GET_LIST, ...tab });
     } else {
-      dispatch({ type:CHANGE_TAB, tab: str });
+      dispatch({ type:CHANGE_TAB, ...tab });
     }
   }
 
   _keyExtractor = (item, index) => item.id;
 
+  _renderTabBar = () => <DefaultTabBar />
+
   render() {
-    const { listData, tab } = this.props;
+    const { listData, listBase } = this.props;
     return (
       <View style={styles.content}>
         <StatusBar
           barStyle="light-content"
         />
         <ScrollableTabView
-          // initialPage={0}
-          renderTabBar={() => <DefaultTabBar />}
+          initialPage={listBase.get('initialPage')}
+          renderTabBar={this._renderTabBar}
           onChangeTab={this._handleOnChangeTab}
           tabBarUnderlineStyle={{
             backgroundColor: '#ace9f1',
@@ -129,29 +150,34 @@ class Home extends Component {
         >
           <FlatList
             tabLabel="全部"
-            data={listData.get(tab).toArray()}
+            data={listData.get('all').toArray()}
             keyExtractor={this._keyExtractor}
             renderItem={({item}) => <ListItem data={item} onPress={this._handleClick} />}
           />
           <FlatList
             tabLabel="精华"
-            data={listData.get(tab).toArray()}
-            renderItem={({item}) => <ListItem data={item} />}
+            data={listData.get('good').toArray()}
+            keyExtractor={this._keyExtractor}
+            renderItem={({item}) => <ListItem data={item} onPress={this._handleClick} />}
           />
           <FlatList
             tabLabel="分享"
-            data={listData.get(tab).toArray()}
-            renderItem={({item}) => <ListItem data={item} />}
+            data={listData.get('share').toArray()}
+            keyExtractor={this._keyExtractor}
+            renderItem={({item}) => <ListItem data={item} onPress={this._handleClick} />}
           />
           <FlatList
             tabLabel="回答"
-            data={listData.get(tab).toArray()}
-            renderItem={({item}) => <ListItem data={item} />}
+            data={listData.get('ask').toArray()}
+            keyExtractor={this._keyExtractor}
+
+            renderItem={({item}) => <ListItem data={item} onPress={this._handleClick} />}
           />
           <FlatList
             tabLabel="招聘"
-            data={listData.get(tab).toArray()}
-            renderItem={({item}) => <ListItem data={item} />}
+            data={listData.get('job').toArray()}
+            keyExtractor={this._keyExtractor}
+            renderItem={({item}) => <ListItem data={item} onPress={this._handleClick} />}
           />
         </ScrollableTabView>
       </View>
@@ -161,7 +187,8 @@ class Home extends Component {
 
 function mapStateToProps(state) {
   return {
-    tab: state.appState.getIn(['listInfo', 'tab']),
+    listBase: state.appState.getIn(['listInfo', 'base']),
+    listInfo: state.appState.get('listInfo'),
     listData: state.appState.get('listData'),
   }
 }

@@ -9,11 +9,6 @@ import { GET_TOPIC } from '../../redux/actions';
 
 const styles = StyleSheet.create({
   title: {
-    // marginTop: 10,
-    // marginBottom: 10,
-    // marginLeft: 10,
-    // marginRight: 10,
-    // height: 40,
     backgroundColor: '#fff',
     justifyContent: 'center',
     alignItems: 'center',
@@ -25,6 +20,11 @@ const styles = StyleSheet.create({
     paddingRight: 10,
     color: '#333',
     fontSize: 20,
+  },
+  article: {
+    paddingTop: 10,
+    paddingBottom: 10,
+    paddingLeft: 10,
   }
 });
 
@@ -69,6 +69,9 @@ class Topic extends PureComponent {
         <HtmlView
           htmlContent={content}
         />
+        <View style={styles.article}>
+          <Text>{`${replies.length} 回复`}</Text>
+        </View>
         <View>
           {
             replies.map((item, i) => <Comment key={i} num={i} data={item} />)

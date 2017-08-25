@@ -3,10 +3,12 @@ import { REQUEST_LIST, CHANGE_TAB, REQUEST_TOPIC } from '../actions';
 
 const initialState = fromJS({
   listInfo: {
-    loading: false,
-    page: 1,
-    tab: 'all',
-    limit: 10,
+    base: { initialPage: 0, tab: 'all' },
+    all: { page: 1, limit: 10, loading: false, },
+    good: { page: 1, limit: 10, loading: false, },
+    share: { page: 1, limit: 10, loading: false, },
+    ask: { page: 1, limit: 10, loading: false, },
+    job: { page: 1, limit: 10, loading: false, },
   },
   listData: {
     all: [],
@@ -34,7 +36,7 @@ export default function (state = initialState, action) {
         .setIn(['listInfo', 'loading'], false)
         .setIn(['listInfo', 'tab'], action.tab);
     case CHANGE_TAB:
-      return state.setIn(['listInfo', 'tab'], action.tab);
+      return state.setIn(['listInfo', 'base'], Map({ initialPage: action.initialPage, tab: action.tab }));
     case `${REQUEST_TOPIC}_OK`:
       return state.set('topic', Map(action.data));
     default:
