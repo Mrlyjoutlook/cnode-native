@@ -57,7 +57,7 @@ class Home extends Component {
           <Icon name="ios-notifications" size={25} color="#fff" />
         </TouchableHighlight>
         <Badge text={100} overflowCount={99} customStyle={styles.badge} />
-        <TouchableHighlight onPress={() => navigate('Admin')}>
+        <TouchableHighlight onPress={() => navigate('Login', { transition: 'forVertical' })}>
           <Icon name="md-settings" size={25} color="#fff" />
         </TouchableHighlight>
       </View>

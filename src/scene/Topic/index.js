@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
 class Topic extends PureComponent {
 
   static navigationOptions = {
-    title: '详情',
+    headerTitle: '详情',
     headerRight: (
       <View>
         <Text>收藏</Text>

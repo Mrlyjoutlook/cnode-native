@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
 class Admin extends PureComponent {
 
   static navigationOptions = {
-    title: '个人中心',
+    headerTitle: '个人中心',
     headerStyle: {
       backgroundColor: theme.backgroundColor,
     },
