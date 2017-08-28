@@ -50,4 +50,4 @@ export const push = ({ name = '', params = {} }) =>  NavigationActions.navigate(
   params,
 });
 
-export const goBack = (key) => NavigationActions.back({ key });
+export const goBack = (key = null) => NavigationActions.back({ key });

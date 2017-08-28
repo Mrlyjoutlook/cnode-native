@@ -12,18 +12,21 @@ const AppNavigator = StackNavigator({
   Topic: { path: 'topic/:id', screen: Topic },
   Login: { screen: Login }
 }, {
+  headerMode: 'screen',
   transitionConfig: () => {
     return ({
-      // transitionSpec: {
-      //   duration: 2000,
-      //   easing: Easing.bounce,
-      //   timing: Animated.timing,
-      // },
-      screenInterpolator: (sceneProps) => {
-        const { scene: { route } } = sceneProps;
+      screenInterpolator: sceneProps => {
+        const { layout, position, scene: { index, route } } = sceneProps;
         const params = route.params || {};
-        const transition = params.transition || 'forHorizontal';
-        return CardStackStyleInterpolator[transition](sceneProps);
+        const translateX = position.interpolate({
+          inputRange: [index - 1 , index, index + 1],
+          outputRange: [layout.initWidth, 0, 0]
+        })
+        const opacity = position.interpolate({
+          inputRange: [index - 1, index - 0.99, index, index + 0.99, index + 1],
+          outputRange: [0, 1, 1, 0.3, 0]
+        })
+        return params.transition ? CardStackStyleInterpolator[ params.transition](sceneProps) : { opacity, transform: [{translateX}] }
       },
     })
   }
