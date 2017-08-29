@@ -7,13 +7,19 @@ import api from '../../config/api';
 |--------------------------------------------------
 */
 
+export const REQUEST_MODAL_LOAD_STATR = 'REQUEST_MODAL_LOAD_STATR';
+export const REQUEST_MODAL_LOAD_STOP = 'REQUEST_MODAL_LOAD_STOP';
 export const GET_LIST = 'GET_LIST';
 export const REQUEST_LIST = 'REQUEST_LIST';
 export const CHANGE_TAB = 'CHANGE_TAB';
 export const GET_TOPIC = 'GET_TOPIC';
 export const REQUEST_TOPIC = 'REQUEST_TOPIC';
+export const REMEMBER_TOKEN = 'REMEMBER_TOKEN';
+export const SAVE_TOKEN = 'SAVE_TOKEN';
 // export const REQUEST_LIST = 'REQUEST_LIST';
-
+export const SIGN_IN = 'SIGN_IN';
+export const SIGN_OUT = 'SIGN_OUT';
+export const REQUEST_LOGIN = 'REQUEST_LOGIN';
 /**
 |--------------------------------------------------
 | create action
@@ -39,6 +45,16 @@ export const getTopic = (id) => (dispatch) => {
   });
 }
 
+export const checkToken = (token) => (dispatch) => {
+  return dispatch({
+    type: REQUEST_LOGIN,
+    method: "POST",
+    url: api.accessToken,
+    data: {
+      accesstoken: token,
+    }
+  });
+}
 /**
 |--------------------------------------------------
 | 路由action

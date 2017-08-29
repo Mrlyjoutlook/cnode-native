@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Animated, View, Text, StyleSheet, Dimensions, TextInput, Button } from 'react-native';
+import { View, Text, StyleSheet, Dimensions, TextInput, Button } from 'react-native';
 import theme from '../../config/styles';
 import Radio from '../../common/Radio';
 import { goBack } from '../../redux/actions';
+import { SIGN_IN, REMEMBER_TOKEN } from '../../redux/actions';
 
 const {height, width} = Dimensions.get('window');
 
@@ -25,7 +26,7 @@ const styles = StyleSheet.create({
     marginTop: height / 14,
     marginBottom: 5,
     color: '#fff',
-    paddingLeft: 5
+    padding: 0
   },
   content_bottom: {
     position: 'absolute',
@@ -43,11 +44,14 @@ class Login extends Component {
     header: null
   })
 
-  state = {}
+  state = {
+    text: '',
+  }
 
   handleLogin = () => {
     const { dispatch } = this.props;
-    dispatch(goBack());
+    const { text } = this.state;
+    dispatch({ type: SIGN_IN, data: text });
   }
 
   handleGoBack = () => {
@@ -55,21 +59,32 @@ class Login extends Component {
     dispatch(goBack());
   }
 
-  handleOnChangeText = () => {
+  handleClickRadio = (bool) => {
+    const { dispatch } = this.props;
+    if (bool) dispatch({ type: REMEMBER_TOKEN, state: bool });
+  }
 
+  handleOnChangeText = (text) => {
+    this.setState({ text });
   }
 
   render() {
+    const { text } = this.state;
     return (
       <View style={styles.content}>
         <Text style={{ color: theme.color_fff, fontSize: theme.text_48 }}>Cnode</Text>
         <Text style={{ color: theme.color_fff, fontSize: theme.text_24 }}>Welcome!</Text>
         <TextInput
+          value={text}
           style={styles.textInput}
           onChangeText={this.handleOnChangeText}
+          // multiline = {true}  // 某些样式属性需要启用此属性才会生效
+          underlineColorAndroid="transparent"  // android 去掉底边框
         />
         <Radio
+          value=""
           text="记住 Access Token"
+          onChange={this.handleClickRadio}
         />
         <Button
           onPress={this.handleLogin}
@@ -91,7 +106,8 @@ class Login extends Component {
 
 function mapStateToProps(state) {
   return {
-    accesstoken: state.userState.get('accesstoken')
+    accesstoken: state.userState.get('accesstoken'),
+    rememberToken: state.userState.get('rememberToken')
   }
 }
 

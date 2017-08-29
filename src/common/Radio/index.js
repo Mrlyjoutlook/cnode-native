@@ -18,7 +18,9 @@ const styles = StyleSheet.create({
 class Radio extends Component {
 
   static defaultProps = {
-    text: 'please set text and value'
+    value: '',
+    text: 'please set text and value',
+    onChange: () => {}
   }
 
   state = {
@@ -27,7 +29,9 @@ class Radio extends Component {
 
   _onPressButton = () => {
     this.setState({
-      check: !this.state.check
+      check: !this.state.check,
+    }, ()=>{
+      this.props.onChange(!this.state.check, this.props.value);
     })
   }
 

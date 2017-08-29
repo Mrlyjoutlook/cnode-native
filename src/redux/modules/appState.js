@@ -1,5 +1,11 @@
 import { fromJS, Map, List } from 'immutable';
-import { REQUEST_LIST, CHANGE_TAB, REQUEST_TOPIC } from '../actions';
+import {
+  REQUEST_MODAL_LOAD_STATR,
+  REQUEST_MODAL_LOAD_STOP,
+  REQUEST_LIST,
+  CHANGE_TAB,
+  REQUEST_TOPIC
+} from '../actions';
 
 const initialState = fromJS({
   listInfo: {
@@ -24,11 +30,19 @@ const initialState = fromJS({
     visit_count: '',
     create_at: '',
     replies: []
-  }
+  },
+  requestLoad: false,
+  error: {
+
+  },
 });
 
 export default function (state = initialState, action) {
   switch (action.type) {
+    case REQUEST_MODAL_LOAD_STATR:
+      return state.set('requestLoad', true);
+    case REQUEST_MODAL_LOAD_STOP:
+      return state.set('requestLoad', false);
     case `${REQUEST_LIST}_LOAD`:
       return state.setIn(['listInfo', 'loading'], true);
     case `${REQUEST_LIST}_OK`:
