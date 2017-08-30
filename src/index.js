@@ -5,7 +5,7 @@ import rootSaga from './redux/saga';
 import App from './App';
 import { View } from 'react-native';
 
-require('moment').locale('zh-cn');
+// require('moment').locale('zh-cn');
 
 // create store
 const { store, run } = createStore();

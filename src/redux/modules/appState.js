@@ -35,6 +35,7 @@ const initialState = fromJS({
   },
   requestLoad: false,
   error: {
+    order: 0,
     appErrorId: [],
     apiErrorId: [],
     data: {}
@@ -43,14 +44,16 @@ const initialState = fromJS({
 
 export default function (state = initialState, action) {
   switch (action.type) {
-    case COLLECT_APP_ERROR || COLLECT_API_ERROR:
-      const i = state.getIn(['error', 'appErrorId']).size + data.getIn(['error', 'apiErrorId']).size;
+    case COLLECT_APP_ERROR:
+    case COLLECT_API_ERROR:
+      const i = state.getIn(['error', 'appErrorId']).size + state.getIn(['error', 'apiErrorId']).size;
       const item = action.type === COLLECT_APP_ERROR ? 'appErrorId' : 'apiErrorId';
       return state.update(
         'error',
         data => data.set(item, data.get(item).push(i))
           .set('data', data.get('data').merge({ [i]: action.error }))
-      );
+          .set('order', i)
+      ).set('requestLoad', false);
     case REQUEST_MODAL_LOAD_STATR:
       return state.set('requestLoad', true);
     case REQUEST_MODAL_LOAD_STOP:
