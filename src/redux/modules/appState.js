@@ -1,5 +1,7 @@
 import { fromJS, Map, List } from 'immutable';
 import {
+  COLLECT_APP_ERROR,
+  COLLECT_API_ERROR,
   REQUEST_MODAL_LOAD_STATR,
   REQUEST_MODAL_LOAD_STOP,
   REQUEST_LIST,
@@ -33,12 +35,22 @@ const initialState = fromJS({
   },
   requestLoad: false,
   error: {
-
+    appErrorId: [],
+    apiErrorId: [],
+    data: {}
   },
 });
 
 export default function (state = initialState, action) {
   switch (action.type) {
+    case COLLECT_APP_ERROR || COLLECT_API_ERROR:
+      const i = state.getIn(['error', 'appErrorId']).size + data.getIn(['error', 'apiErrorId']).size;
+      const item = action.type === COLLECT_APP_ERROR ? 'appErrorId' : 'apiErrorId';
+      return state.update(
+        'error',
+        data => data.set(item, data.get(item).push(i))
+          .set('data', data.get('data').merge({ [i]: action.error }))
+      );
     case REQUEST_MODAL_LOAD_STATR:
       return state.set('requestLoad', true);
     case REQUEST_MODAL_LOAD_STOP:

@@ -1,5 +1,6 @@
 import { all, put, select, takeLatest } from 'redux-saga/effects';
 import {
+  COLLECT_APP_ERROR,
   REQUEST_MODAL_LOAD_STATR,
   REQUEST_MODAL_LOAD_STOP,
   goBack,

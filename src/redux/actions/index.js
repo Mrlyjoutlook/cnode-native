@@ -7,6 +7,8 @@ import api from '../../config/api';
 |--------------------------------------------------
 */
 
+export const COLLECT_APP_ERROR = 'COLLECT_APP_ERROR';
+export const COLLECT_API_ERROR = 'COLLECT_API_ERROR';
 export const REQUEST_MODAL_LOAD_STATR = 'REQUEST_MODAL_LOAD_STATR';
 export const REQUEST_MODAL_LOAD_STOP = 'REQUEST_MODAL_LOAD_STOP';
 export const GET_LIST = 'GET_LIST';
@@ -20,6 +22,7 @@ export const SAVE_TOKEN = 'SAVE_TOKEN';
 export const SIGN_IN = 'SIGN_IN';
 export const SIGN_OUT = 'SIGN_OUT';
 export const REQUEST_LOGIN = 'REQUEST_LOGIN';
+
 /**
 |--------------------------------------------------
 | create action
