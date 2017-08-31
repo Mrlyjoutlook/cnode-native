@@ -14,20 +14,18 @@ import {
 function* watchLogin({ data }) {
   try {
     yield put({ type: SAVE_TOKEN, data }); // save token
-    yield put({ type: REQUEST_MODAL_LOAD_STATR })
+    yield put({ type: REQUEST_MODAL_LOAD_STATR });
     const result = yield put.resolve(checkToken(data));
+    yield put({ type: REQUEST_MODAL_LOAD_STOP });
     if (result.success) {
-      yield all({
-        load: put({ type: REQUEST_MODAL_LOAD_STOP }),
-        result: put({ type: `${REQUEST_LOGIN}_OK`, data: result }),
-      })
+      yield put({ type: `${REQUEST_LOGIN}_OK`, data: result });
       yield put(goBack());
     } else {
       // yield put({ type: `${REQUEST_LOGIN}_FAIL` });
       yield put({ type: COLLECT_API_ERROR, error: { message: result.error_msg } });
     }
   } catch (e) {
-    yield put({ type: COLLECT_APP_ERROR, error: { message: e.message } });
+    yield put({ type: COLLECT_API_ERROR, error: { message: e.message } });
   }
 }
 

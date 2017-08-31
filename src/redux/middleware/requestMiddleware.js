@@ -47,7 +47,7 @@ export default ({ dispatch, getState }) => (next) => (action) => {
       let responseJson = await response.json();
       return responseJson;
     } catch(error) {
-      console.error(error);
+      dispatch({ type: 'COLLECT_APP_ERROR', error: { message: error } });
     }
   }
 

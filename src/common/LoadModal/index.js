@@ -23,7 +23,6 @@ const styles = StyleSheet.create({
   }
 });
 
-
 class LoadModal extends Component {
 
   static defaultProps = {

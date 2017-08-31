@@ -9,6 +9,8 @@ import api from '../../config/api';
 
 export const COLLECT_APP_ERROR = 'COLLECT_APP_ERROR';
 export const COLLECT_API_ERROR = 'COLLECT_API_ERROR';
+export const SEND_MESSAGE = 'SEND_MESSAGE';
+export const CLOSE_MESSAGE = 'CLOSE_MESSAGE';
 export const REQUEST_MODAL_LOAD_STATR = 'REQUEST_MODAL_LOAD_STATR';
 export const REQUEST_MODAL_LOAD_STOP = 'REQUEST_MODAL_LOAD_STOP';
 export const GET_LIST = 'GET_LIST';

@@ -1,5 +1,7 @@
 import { fromJS, Map, List } from 'immutable';
 import {
+  SEND_MESSAGE,
+  CLOSE_MESSAGE,
   COLLECT_APP_ERROR,
   COLLECT_API_ERROR,
   REQUEST_MODAL_LOAD_STATR,
@@ -35,15 +37,26 @@ const initialState = fromJS({
   },
   requestLoad: false,
   error: {
-    order: 0,
     appErrorId: [],
     apiErrorId: [],
     data: {}
   },
+  message: {
+    title: '',
+    content: '',
+    btn: []
+  }
 });
 
 export default function (state = initialState, action) {
   switch (action.type) {
+    case SEND_MESSAGE:
+    case CLOSE_MESSAGE:
+      return state.set('message', Map({
+        title: action.type === SEND_MESSAGE ? action.title : '',
+        content: action.type === SEND_MESSAGE ? action.content : '',
+        btn: action.type === SEND_MESSAGE ? action.btn : []
+      }));
     case COLLECT_APP_ERROR:
     case COLLECT_API_ERROR:
       const i = state.getIn(['error', 'appErrorId']).size + state.getIn(['error', 'apiErrorId']).size;
@@ -53,7 +66,12 @@ export default function (state = initialState, action) {
         data => data.set(item, data.get(item).push(i))
           .set('data', data.get('data').merge({ [i]: action.error }))
           .set('order', i)
-      ).set('requestLoad', false);
+      ).set('requestLoad', false)
+      .set('message', Map({
+        title: '提示',
+        content: action.type === COLLECT_APP_ERROR ? '程序异常' : '网络异常',
+        btn: action.btn
+      }));
     case REQUEST_MODAL_LOAD_STATR:
       return state.set('requestLoad', true);
     case REQUEST_MODAL_LOAD_STOP:
