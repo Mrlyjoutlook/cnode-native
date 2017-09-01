@@ -3,7 +3,7 @@ import { SAVE_TOKEN, REMEMBER_TOKEN, REQUEST_LOGIN } from '../actions';
 
 const initialState = fromJS({
   rememberToken: false,
-  accesstoken: '3d926f56-bcee-4333-a18c-736a77638f49',
+  accesstoken: '',  //3d926f56-bcee-4333-a18c-736a77638f49
   info: {},
 });
 

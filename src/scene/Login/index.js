@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { is } from 'immutable';
 import { View, Text, StyleSheet, Dimensions, TextInput, Button } from 'react-native';
 import theme from '../../config/styles';
 import Radio from '../../common/Radio';
@@ -45,7 +46,12 @@ class Login extends Component {
   })
 
   state = {
-    text: '',
+    text: this.props.rememberToken ? this.props.accesstoken : '',
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { accesstoken } = nextProps;
+    if (!is(accesstoken, this.props.accesstoken)) this.setState({ text: accesstoken });
   }
 
   handleLogin = () => {
@@ -70,6 +76,7 @@ class Login extends Component {
 
   render() {
     const { text } = this.state;
+    const { rememberToken } = this.props;
     return (
       <View style={styles.content}>
         <Text style={{ color: theme.color_fff, fontSize: theme.text_48 }}>Cnode</Text>
@@ -84,6 +91,7 @@ class Login extends Component {
         <Radio
           value=""
           text="记住 Access Token"
+          defaultCheck={rememberToken}
           onChange={this.handleClickRadio}
         />
         <Button

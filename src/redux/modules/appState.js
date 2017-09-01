@@ -73,9 +73,8 @@ export default function (state = initialState, action) {
         btn: action.btn
       }));
     case REQUEST_MODAL_LOAD_STATR:
-      return state.set('requestLoad', true);
     case REQUEST_MODAL_LOAD_STOP:
-      return state.set('requestLoad', false);
+      return state.set('requestLoad', action.type === REQUEST_MODAL_LOAD_STATR ? true : false);
     case `${REQUEST_LIST}_LOAD`:
       return state.setIn(['listInfo', 'loading'], true);
     case `${REQUEST_LIST}_OK`:

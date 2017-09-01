@@ -1,5 +1,6 @@
 import { all, put, select, takeLatest } from 'redux-saga/effects';
 import {
+  SEND_MESSAGE,
   COLLECT_API_ERROR,
   COLLECT_APP_ERROR,
   REQUEST_MODAL_LOAD_STATR,
@@ -22,7 +23,7 @@ function* watchLogin({ data }) {
       yield put(goBack());
     } else {
       // yield put({ type: `${REQUEST_LOGIN}_FAIL` });
-      yield put({ type: COLLECT_API_ERROR, error: { message: result.error_msg } });
+      yield put({ type: SEND_MESSAGE, content: result.error_msg });
     }
   } catch (e) {
     yield put({ type: COLLECT_API_ERROR, error: { message: e.message } });

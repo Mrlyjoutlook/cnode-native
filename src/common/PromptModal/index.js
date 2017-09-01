@@ -82,12 +82,8 @@ class PromptModal extends Component {
 
   _onPress = (func) => {
     return (e) => {
-      this.setState({
-        visible: false
-      }, ()=>{
-        this.props.btnFunc();
-        func();
-      })
+      this.props.btnFunc();
+      func();
     }
   }
 

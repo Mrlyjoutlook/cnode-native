@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, TouchableHighlight } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 const styles = StyleSheet.create({
@@ -20,18 +20,25 @@ class Radio extends Component {
   static defaultProps = {
     value: '',
     text: 'please set text and value',
-    onChange: () => {}
+    onChange: () => {},
+    check: false,
+    defaultCheck: false
   }
 
   state = {
-    check: false,
+    check: this.props.defaultCheck ? true : this.props.check ? true : false,
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { check } = nextProps;
+    if (check !== this.props.check) this.setState({ check });
   }
 
   _onPressButton = () => {
     this.setState({
       check: !this.state.check,
     }, ()=>{
-      this.props.onChange(!this.state.check, this.props.value);
+      this.props.onChange(this.state.check, this.props.value);
     })
   }
 
@@ -40,9 +47,9 @@ class Radio extends Component {
     const { check } = this.state;
     return (
       <View style={styles.content}>
-        <TouchableHighlight onPress={this._onPressButton}>
+        <TouchableOpacity onPress={this._onPressButton}>
           <Icon name={check ? 'ios-radio-button-on' : 'ios-radio-button-off'} size={25} color="#d0e9ff" />
-        </TouchableHighlight>
+        </TouchableOpacity>
         <Text style={styles.text}>{text}</Text>
       </View>
     );

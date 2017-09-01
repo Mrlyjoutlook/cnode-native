@@ -24,9 +24,6 @@ class App extends Component {
 
   componentWillReceiveProps(nextProps) {
     const { message } = nextProps;
-    /**
-     *
-     */
     if (!is(message, this.props.message)) {
       this.setState({
         prompt: {
