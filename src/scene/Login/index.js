@@ -4,8 +4,7 @@ import { is } from 'immutable';
 import { View, Text, StyleSheet, Dimensions, TextInput, Button } from 'react-native';
 import theme from '../../config/styles';
 import Radio from '../../common/Radio';
-import { goBack } from '../../redux/actions';
-import { SIGN_IN, REMEMBER_TOKEN } from '../../redux/actions';
+import { SIGN_IN, REMEMBER_TOKEN, goBack } from '../../redux/actions';
 
 const {height, width} = Dimensions.get('window');
 
@@ -36,7 +35,7 @@ const styles = StyleSheet.create({
   attach: {
     marginTop: 30,
     color: theme.color_d0e9ff
-  }
+  },
 });
 
 class Login extends Component {
@@ -107,6 +106,15 @@ class Login extends Component {
           />
           <Text style={styles.attach}>cnode by mrlyj</Text>
         </View>
+        <Modal
+          isOpen={true}
+          onClosed={() => {}}
+          style={[styles.modal, styles.modal4]}
+          position={"center"}
+          backdropContent={BContent}
+        >
+          <Text style={styles.text}>Modal with backdrop content</Text>
+        </Modal>
       </View>
     );
   }

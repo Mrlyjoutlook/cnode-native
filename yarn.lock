@@ -1245,7 +1245,7 @@ crc@3.3.0:
   version "3.3.0"
   resolved "http://r.cnpmjs.org/crc/download/crc-3.3.0.tgz#fa622e1bc388bf257309082d6b65200ce67090ba"
 
-create-react-class@^15.5.2:
+create-react-class@^15.5.2, create-react-class@^15.6.0:
   version "15.6.0"
   resolved "http://r.cnpmjs.org/create-react-class/download/create-react-class-15.6.0.tgz#ab448497c26566e1e29413e883207d57cfe7bed4"
   dependencies:
@@ -3401,6 +3401,13 @@ react-native-htmlview@^0.12.0:
   dependencies:
     entities "^1.1.1"
     htmlparser2-without-node-native "^3.9.0"
+
+react-native-modalbox@^1.4.2:
+  version "1.4.2"
+  resolved "http://r.cnpmjs.org/react-native-modalbox/download/react-native-modalbox-1.4.2.tgz#818c9354c9b13327ec807c6436e8516b3b419478"
+  dependencies:
+    create-react-class "^15.6.0"
+    prop-types "^15.5.10"
 
 react-native-scrollable-tab-view@^0.6.7:
   version "0.6.7"

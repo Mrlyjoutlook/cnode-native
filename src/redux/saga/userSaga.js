@@ -1,4 +1,4 @@
-import { all, put, select, takeLatest } from 'redux-saga/effects';
+import { all, put, cancel, select, takeLatest, takeEvery } from 'redux-saga/effects';
 import {
   SEND_MESSAGE,
   COLLECT_API_ERROR,
@@ -10,6 +10,7 @@ import {
   SIGN_IN,
   checkToken,
   REQUEST_LOGIN,
+  push
 } from '../actions';
 
 function* watchLogin({ data }) {

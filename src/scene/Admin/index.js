@@ -1,6 +1,9 @@
 import React, { PureComponent } from 'react';
-import { View, Text, Image, StyleSheet } from 'react-native';
+import { View, Text, Image, StyleSheet, TouchableHighlight } from 'react-native';
+import { connect } from 'react-redux';
 import Icon from 'react-native-vector-icons/Ionicons';
+import Modal from 'react-native-modalbox';
+import ListInfo from '../../common/ListInfo';
 import Badge from '../../common/Badge';
 import theme from '../../config/styles';
 
@@ -45,12 +48,21 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 10
+  },
+  blak: {
+    height: 20
   },
   column_item: {
     flexDirection: 'row',
     alignItems: 'center',
-  }
+  },
+  modal: {
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  modal4: {
+    height: 300
+  },
 });
 
 class Admin extends PureComponent {
@@ -65,51 +77,113 @@ class Admin extends PureComponent {
     },
   };
 
+  _onPressItem = () => {
+
+  }
+
   render() {
-
-    const columnData = [
-      { text: '收藏的话题', icon: 'logo-github' },
-      { text: '最近参与的话题', icon: 'logo-github' },
-      { text: '最近创建的话题', icon: 'logo-github' },
-      { text: '注销', icon: 'logo-github' }
-    ];
-
+    const { info } = this.props;
     return (
-      <View>
+      <View style={{flex:1}}>
         <View style={[styles.author, styles.color_fff]}>
           <View style={[styles.proportion_1]}>
             <Image
               style={styles.image}
-              source={{ uri: 'https://avatars3.githubusercontent.com/u/16191526?v=4&s=120' }} //avatar_url
+              source={{ uri: info.get('avatar_url') }}
             />
           </View>
           <View style={[styles.proportion_3]}>
-            <Text style={styles.text}>{'Mrlyjoutlook'}</Text>
-            <Text style={[styles.text, styles.color_666]}>{`积分：${100}`}</Text>
+            <Text style={styles.text}>{info.get('loginname')}</Text>
+            <Text style={[styles.text, styles.color_666]}>{`积分：${info.get('score') || 0}`}</Text>
           </View>
           <View style={[styles.proportion_1]}>
             <Icon name="logo-github" size={25} />
           </View>
         </View>
-        {
-          columnData.map((item, i) => (
-            <View style={[styles.column, styles.color_fff]} key={i}>
-              <View style={styles.column_item}>
-                <Icon name={item.icon} size={30} style={{ marginRight: 10 }} />
-                <Text>{item.text}</Text>
-              </View>
-              <View style={styles.column_item}>
-                <Badge text={100} overflowCount={99} />
-                <Icon name="ios-arrow-forward" size={30} style={{ marginLeft: 10 }} />
-              </View>
+
+        <TouchableHighlight onPress={this._onPressItem}>
+          <View style={[styles.column, styles.color_fff]}>
+            <View style={styles.column_item}>
+              <Icon name="logo-github" size={30} style={{ marginRight: 10 }} />
+              <Text>收藏的话题</Text>
             </View>
-          ))
-        }
+            <View style={styles.column_item}>
+              <Badge text={100} overflowCount={99} />
+              <Icon name="ios-arrow-forward" size={30} style={{ marginLeft: 10 }} />
+            </View>
+          </View>
+        </TouchableHighlight>
+        <TouchableHighlight onPress={this._onPressItem}>
+          <View style={[styles.column, styles.color_fff]}>
+            <View style={styles.column_item}>
+              <Icon name="logo-github" size={30} style={{ marginRight: 10 }} />
+              <Text>最近参与的话题</Text>
+            </View>
+            <View style={styles.column_item}>
+              <Badge text={100} overflowCount={99} />
+              <Icon name="ios-arrow-forward" size={30} style={{ marginLeft: 10 }} />
+            </View>
+          </View>
+        </TouchableHighlight>
+        <TouchableHighlight onPress={this._onPressItem}>
+          <View style={[styles.column, styles.color_fff]}>
+            <View style={styles.column_item}>
+              <Icon name="logo-github" size={30} style={{ marginRight: 10 }} />
+              <Text>最近创建的话题</Text>
+            </View>
+            <View style={styles.column_item}>
+              <Badge text={100} overflowCount={99} />
+              <Icon name="ios-arrow-forward" size={30} style={{ marginLeft: 10 }} />
+            </View>
+          </View>
+        </TouchableHighlight>
+
+        <View style={styles.blak}/>
+
+        <TouchableHighlight onPress={this._onPressItem}>
+          <View style={[styles.column, styles.color_fff]}>
+            <View style={styles.column_item}>
+              <Icon name="logo-github" size={30} style={{ marginRight: 10 }} />
+              <Text>注销</Text>
+            </View>
+            <View style={styles.column_item}>
+              <Badge text={100} overflowCount={99} />
+              <Icon name="ios-arrow-forward" size={30} style={{ marginLeft: 10 }} />
+            </View>
+          </View>
+        </TouchableHighlight>
+
+        <Modal
+          isOpen={true}
+          onClosed={() => {}}
+          style={[styles.modal, styles.modal4]}
+          position={"center"}
+        >
+          <ListInfo
+            listData={[{
+              id: "580460a5fdf3bd3d651186d1",
+              last_reply_at: "2016-10-24T04:09:13.002Z",
+              title: "推荐你心中的CNode「极客代言人」，打造《中国技术社群英雄谱》"
+            },{
+              id: "580460a5fdf3bd3d651186d1",
+              last_reply_at: "2016-10-24T04:09:13.002Z",
+              title: "推荐你心中的CNode「极客代言人」，打造《中国技术社群英雄谱》"
+            },{
+              id: "580460a5fdf3bd3d651186d1",
+              last_reply_at: "2016-10-24T04:09:13.002Z",
+              title: "推荐你心中的CNode「极客代言人」，打造《中国技术社群英雄谱》"
+            }]}
+          />
+        </Modal>
       </View>
     );
   }
 }
 
-export default Admin;
+function mapStateToProps(state) {
+  return {
+    info: state.userState.get('info')
+  }
+}
 
-//loginname score
+export default connect(mapStateToProps)(Admin);

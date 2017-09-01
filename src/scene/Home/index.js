@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View, Text, Button, TouchableHighlight, StyleSheet, StatusBar, FlatList } from 'react-native';
+import { View, Text, Button, TouchableOpacity, StyleSheet, StatusBar, FlatList } from 'react-native';
 import ScrollableTabView, { DefaultTabBar } from 'react-native-scrollable-tab-view';
 import { is } from 'immutable';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -45,7 +45,7 @@ const styles =  StyleSheet.create({
 
 class Home extends Component {
 
-  static navigationOptions = ({ navigation: { navigate } }) => ({
+  static navigationOptions = ({ navigation: { navigate, state: { params } } }) => ({
     headerLeft: (
       <View>
         <Text style={styles.navLeft}>Cnode中文社区</Text>
@@ -53,13 +53,13 @@ class Home extends Component {
     ),
     headerRight: (
       <View style={styles.navRight}>
-        <TouchableHighlight>
+        <TouchableOpacity onPress={ params ? params.push('') : null }>
           <Icon name="ios-notifications" size={25} color="#fff" />
-        </TouchableHighlight>
-        <Badge text={100} overflowCount={99} customStyle={styles.badge} />
-        <TouchableHighlight onPress={() => navigate('Login', { transition: 'forFadeFromBottomAndroid' })}>
+        </TouchableOpacity>
+        <Badge text={0} overflowCount={99} customStyle={styles.badge} />
+        <TouchableOpacity onPress={ params ? params.push('Admin') : null }>
           <Icon name="md-person" size={25} color="#fff" />
-        </TouchableHighlight>
+        </TouchableOpacity>
       </View>
     ),
     headerStyle: {
@@ -69,8 +69,11 @@ class Home extends Component {
   })
 
   componentDidMount() {
-    const { dispatch } = this.props;
+    const { dispatch, navigation } = this.props;
     dispatch({ type:GET_LIST, tab: 'all' });
+    navigation.setParams({
+      push: this._handleClickNav
+    })
   }
 
   shouldComponentUpdate(nextProps) {
@@ -80,11 +83,13 @@ class Home extends Component {
 
   state = {}
 
-  _handleClickSet = () => {
-    const { dispatch } = this.props;
-    dispatch(push({
-      name: 'Admin'
-    }))
+  _handleClickNav = (type) => {
+    return () => {
+      const { dispatch } = this.props;
+      dispatch(push({
+        name: type
+      }));
+    }
   }
 
   _handleClick = (id) => {
@@ -189,7 +194,7 @@ function mapStateToProps(state) {
   return {
     listBase: state.appState.getIn(['listInfo', 'base']),
     listInfo: state.appState.get('listInfo'),
-    listData: state.appState.get('listData'),
+    listData: state.appState.get('listData')
   }
 }
 
