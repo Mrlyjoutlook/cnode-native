@@ -25,6 +25,7 @@ export const CLOSEMODAL_PUSH = 'CLOSEMODAL_PUSH';
 export const SIGN_IN = 'SIGN_IN';
 export const SIGN_OUT = 'SIGN_OUT';
 export const REQUEST_LOGIN = 'REQUEST_LOGIN';
+export const CLEAR_USERINFO = 'CLEAR_USERINFO';
 export const GET_USERINFO = 'GET_USERINFO';
 export const REQUSET_USERINFO = 'REQUSET_USERINFO';
 
@@ -74,6 +75,7 @@ export const getUserInfo = (loginname) => (dispatch) => {
 export const modal = (data) => ({
   type: MODAL, data
 });
+
 /**
 |--------------------------------------------------
 | 路由action

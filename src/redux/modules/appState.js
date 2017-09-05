@@ -49,7 +49,7 @@ const initialState = fromJS({
   },
   modal: {
     open: false,
-    type: '', // collect, create, partake
+    type: '', // collect, recent_replies, recent_topics
     title: '',
   }
 });

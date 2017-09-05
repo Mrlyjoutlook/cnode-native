@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { View, Text, ScrollView, StyleSheet } from 'react-native';
+import { View, Text, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { is } from 'immutable';
@@ -36,8 +36,10 @@ class Topic extends PureComponent {
   static navigationOptions = ({ navigation: { navigate, state: { params } } }) => ({
     headerTitle: '详情',
     headerLeft: (
-      <View onPress={params ? params.back : null}>
-        <Icon name="ios-arrow-back" size={26} style={{marginLeft:10, color: '#fff'}}/>
+      <View>
+        <TouchableOpacity onPress={params ? params.back : null}>
+          <Icon name="ios-arrow-back" size={26} style={{marginLeft:10, color: '#fff'}}/>
+        </TouchableOpacity>
       </View>
     ),
     headerRight: (

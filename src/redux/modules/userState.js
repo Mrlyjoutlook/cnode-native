@@ -4,6 +4,7 @@ import {
   REMEMBER_TOKEN,
   REQUEST_LOGIN,
   REQUSET_USERINFO,
+  CLEAR_USERINFO
 } from '../actions';
 
 const initialState = fromJS({
@@ -22,6 +23,12 @@ export default function (state = initialState, action) {
       return state.set('info', Map(action.data));
     case `${REQUSET_USERINFO}_OK`:
       return state.set('info', state.get('info').merge(action.data));
+    case CLEAR_USERINFO:
+      return fromJS({
+        rememberToken: false,
+        accesstoken: '',
+        info: {},
+      });
     default:
       return state;
   }

@@ -1,8 +1,8 @@
 import React, { PureComponent } from 'react';
-import { View, Text, Image, StyleSheet, TouchableHighlight, Dimensions } from 'react-native';
+import { View, Text, Image, StyleSheet, TouchableHighlight, TouchableOpacity, Dimensions } from 'react-native';
 import { connect } from 'react-redux';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { modal, GET_USERINFO, SIGN_OUT } from '../../redux/actions';
+import { modal, goBack, GET_USERINFO, SIGN_OUT, SEND_MESSAGE } from '../../redux/actions';
 import Badge from '../../common/Badge';
 import theme from '../../config/styles';
 
@@ -61,11 +61,13 @@ const styles = StyleSheet.create({
 
 class Admin extends PureComponent {
 
-  static navigationOptions = {
+  static navigationOptions = ({ navigation: { navigate, state: { params } } }) => ({
     headerTitle: '个人中心',
     headerLeft: (
       <View>
-        <Icon name="ios-arrow-back" size={26} style={{marginLeft:10, color: '#fff'}}/>
+        <TouchableOpacity onPress={params ? params.back : null}>
+          <Icon name="ios-arrow-back" size={26} style={{marginLeft:10, color: '#fff'}}/>
+        </TouchableOpacity>
       </View>
     ),
     headerStyle: {
@@ -74,11 +76,18 @@ class Admin extends PureComponent {
     headerTitleStyle: {
       color: '#fff'
     },
-  };
+  });
 
   componentDidMount() {
-    const { dispatch } = this.props;
+    const { dispatch, navigation } = this.props;
     dispatch({ type: GET_USERINFO });
+    navigation.setParams({
+      back: this._handNavGoBack
+    });
+  }
+
+  _handNavGoBack = () => {
+    this.props.dispatch(goBack());
   }
 
   _onPressItem = (type, title) => {
@@ -89,7 +98,20 @@ class Admin extends PureComponent {
   }
 
   _loginOut = () => {
-    this.props.dispatch({ type: SIGN_OUT });
+    const { dispatch } = this.props;
+    dispatch({
+      type: SEND_MESSAGE,
+      content: '退出当前账户？',
+      btn: [{
+        text: '取消',
+        onPress: () => {}
+      }, {
+        text: '确定',
+        onPress: () => {
+          this.props.dispatch({ type: SIGN_OUT });
+        }
+      }]
+    });
   }
 
   render() {
@@ -124,26 +146,26 @@ class Admin extends PureComponent {
             </View>
           </View>
         </TouchableHighlight>
-        <TouchableHighlight onPress={this._onPressItem('partake', '最近参与的话题')}>
+        <TouchableHighlight onPress={this._onPressItem('recent_replies', '最近参与的话题')}>
           <View style={[styles.column, styles.color_fff]}>
             <View style={styles.column_item}>
               <Icon name="logo-github" size={30} style={{ marginRight: 10 }} />
               <Text>最近参与的话题</Text>
             </View>
             <View style={styles.column_item}>
-              <Badge text={info.get('recent_replies').size} overflowCount={99} />
+              <Badge text={info.get('recent_replies') && info.get('recent_replies').size} overflowCount={99} />
               <Icon name="ios-arrow-forward" size={30} style={{ marginLeft: 10 }} />
             </View>
           </View>
         </TouchableHighlight>
-        <TouchableHighlight onPress={this._onPressItem('create', '最近创建的话题')}>
+        <TouchableHighlight onPress={this._onPressItem('recent_topics', '最近创建的话题')}>
           <View style={[styles.column, styles.color_fff]}>
             <View style={styles.column_item}>
               <Icon name="logo-github" size={30} style={{ marginRight: 10 }} />
               <Text>最近创建的话题</Text>
             </View>
             <View style={styles.column_item}>
-              <Badge text={info.get('recent_topics').size} overflowCount={99} />
+              <Badge text={info.get('recent_topics') && info.get('recent_topics').size} overflowCount={99} />
               <Icon name="ios-arrow-forward" size={30} style={{ marginLeft: 10 }} />
             </View>
           </View>
@@ -158,7 +180,6 @@ class Admin extends PureComponent {
               <Text>注销</Text>
             </View>
             <View style={styles.column_item}>
-              <Badge text={100} overflowCount={99} />
               <Icon name="ios-arrow-forward" size={30} style={{ marginLeft: 10 }} />
             </View>
           </View>

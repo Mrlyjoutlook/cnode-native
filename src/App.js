@@ -73,7 +73,7 @@ class App extends Component {
 
   render() {
     const { prompt } = this.state;
-    const { requestLoad, modal, dispatch, routerState } = this.props;
+    const { requestLoad, modal, dispatch, routerState, info, message } = this.props;
     return (
       <View style={{ flex: 1 }}>
         <AppNavigator navigation={addNavigationHelpers({
@@ -86,6 +86,7 @@ class App extends Component {
         <PromptModal
           visible={prompt.visible}
           content={prompt.message}
+          btn={message.get('btn')}
           btnFunc={this._promptBtnFunc}
         />
         <Modal
@@ -101,19 +102,7 @@ class App extends Component {
           </View>
           <ListInfo
             onClick={this._onClickListInfo}
-            listData={[{
-              id: "580460a5fdf3bd3d651186d1",
-              last_reply_at: "2016-10-24T04:09:13.002Z",
-              title: "推荐你心中的CNode「极客代言人」，打造《中国技术社群英雄谱》"
-            }, {
-              id: "580460a5fdf3bd3d651186d1",
-              last_reply_at: "2016-10-24T04:09:14.002Z",
-              title: "推荐你心中的CNode「极客代言人」，打造《中国技术社群英雄谱》"
-            }, {
-              id: "580460a5fdf3bd3d651186d1",
-              last_reply_at: "2016-10-24T04:09:15.002Z",
-              title: "推荐你心中的CNode「极客代言人」，打造《中国技术社群英雄谱》"
-            }]}
+            listData={info.get(modal.get('type')) && info.get(modal.get('type')).toJS()}
           />
         </Modal>
       </View>
@@ -126,7 +115,8 @@ const mapStateToProps = (state) => ({
   requestLoad: state.appState.get('requestLoad'),
   error: state.appState.get('error'),
   message: state.appState.get('message'),
-  modal: state.appState.get('modal')
+  modal: state.appState.get('modal'),
+  info: state.userState.get('info'),
 });
 
 export default connect(mapStateToProps)(App);

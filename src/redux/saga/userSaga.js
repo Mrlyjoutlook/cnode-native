@@ -9,14 +9,16 @@ import {
   goBack,
   SAVE_TOKEN,
   SIGN_IN,
+  SIGN_OUT,
   checkToken,
   REQUEST_LOGIN,
   push,
   getUserInfo,
-  REQUSET_USERINFO
+  REQUSET_USERINFO,
+  CLEAR_USERINFO
 } from '../actions';
 
-function* watchLogin({ data }) {
+function* watchLogin ({ data }) {
   try {
     yield put({ type: SAVE_TOKEN, data }); // save token
     yield put({ type: REQUEST_MODAL_LOAD_STATR });
@@ -32,6 +34,11 @@ function* watchLogin({ data }) {
   } catch (e) {
     yield put({ type: COLLECT_API_ERROR, error: { message: e.message } });
   }
+}
+
+function* watchLoginOut () {
+  yield put({ type: CLEAR_USERINFO });
+  yield put(goBack());
 }
 
 function* watchUserInfo () {
@@ -53,5 +60,6 @@ function* watchUserInfo () {
 
 export default function* userTask() {
   yield takeLatest(SIGN_IN, watchLogin);
+  yield takeLatest(SIGN_OUT, watchLoginOut);
   yield takeLatest(GET_USERINFO, watchUserInfo);
 }

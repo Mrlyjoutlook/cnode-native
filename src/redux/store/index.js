@@ -1,6 +1,7 @@
 import { applyMiddleware, compose, createStore } from 'redux';
 import thunk from 'redux-thunk';
 import createSagaMiddleware from 'redux-saga';
+import {autoRehydrate} from 'redux-persist'
 import reducers from '../modules';
 import request from '../middleware/requestMiddleware';
 import checkLogin from '../middleware/checkLoginMiddleware';
@@ -13,7 +14,7 @@ export default (initialState = {}) => {
   const middleware = [ thunk, request, checkLogin, sagaMiddleware];
 
   // Store Enhancers
-  const enhancers = [];
+  const enhancers = [autoRehydrate()];
 
   // Store Instantiation and HMR Setup
   const store = createStore(
