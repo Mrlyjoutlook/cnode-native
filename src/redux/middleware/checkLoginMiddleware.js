@@ -6,7 +6,11 @@ export default ({ dispatch, getState }) => (next) => (action) => {
   if (routeName) {
     if (routeName === 'Admin') {
       const isLogin = getState().userState.get('info').size;
-      if (!isLogin) dispatch(push({ name: 'Login', params: { transition: 'forFadeFromBottomAndroid' } }));
+      if (!isLogin) {
+        dispatch(push({ name: 'Login', params: { transition: 'forFadeFromBottomAndroid' } }));
+      } else {
+        next(action);
+      }
     } else {
       next(action);
     }

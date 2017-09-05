@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import { View, Text, Image, StyleSheet, TouchableHighlight, Dimensions } from 'react-native';
 import { connect } from 'react-redux';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { modal } from '../../redux/actions';
+import { modal, GET_USERINFO, SIGN_OUT } from '../../redux/actions';
 import Badge from '../../common/Badge';
 import theme from '../../config/styles';
 
@@ -76,11 +76,20 @@ class Admin extends PureComponent {
     },
   };
 
+  componentDidMount() {
+    const { dispatch } = this.props;
+    dispatch({ type: GET_USERINFO });
+  }
+
   _onPressItem = (type, title) => {
     return () => {
       const { dispatch } = this.props;
       dispatch(modal({open: true, type, title, }));
     }
+  }
+
+  _loginOut = () => {
+    this.props.dispatch({ type: SIGN_OUT });
   }
 
   render() {
@@ -122,7 +131,7 @@ class Admin extends PureComponent {
               <Text>最近参与的话题</Text>
             </View>
             <View style={styles.column_item}>
-              <Badge text={100} overflowCount={99} />
+              <Badge text={info.get('recent_replies').size} overflowCount={99} />
               <Icon name="ios-arrow-forward" size={30} style={{ marginLeft: 10 }} />
             </View>
           </View>
@@ -134,7 +143,7 @@ class Admin extends PureComponent {
               <Text>最近创建的话题</Text>
             </View>
             <View style={styles.column_item}>
-              <Badge text={100} overflowCount={99} />
+              <Badge text={info.get('recent_topics').size} overflowCount={99} />
               <Icon name="ios-arrow-forward" size={30} style={{ marginLeft: 10 }} />
             </View>
           </View>
@@ -142,7 +151,7 @@ class Admin extends PureComponent {
 
         <View style={styles.blak}/>
 
-        <TouchableHighlight onPress={this._onPressItem()}>
+        <TouchableHighlight onPress={this._loginOut}>
           <View style={[styles.column, styles.color_fff]}>
             <View style={styles.column_item}>
               <Icon name="logo-github" size={30} style={{ marginRight: 10 }} />

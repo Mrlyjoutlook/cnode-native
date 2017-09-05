@@ -1,5 +1,10 @@
 import { fromJS, Map } from 'immutable';
-import { SAVE_TOKEN, REMEMBER_TOKEN, REQUEST_LOGIN } from '../actions';
+import {
+  SAVE_TOKEN,
+  REMEMBER_TOKEN,
+  REQUEST_LOGIN,
+  REQUSET_USERINFO,
+} from '../actions';
 
 const initialState = fromJS({
   rememberToken: false,
@@ -15,6 +20,8 @@ export default function (state = initialState, action) {
       return state.set('accesstoken', action.data);
     case `${REQUEST_LOGIN}_OK`:
       return state.set('info', Map(action.data));
+    case `${REQUSET_USERINFO}_OK`:
+      return state.set('info', state.get('info').merge(action.data));
     default:
       return state;
   }

@@ -25,6 +25,8 @@ export const CLOSEMODAL_PUSH = 'CLOSEMODAL_PUSH';
 export const SIGN_IN = 'SIGN_IN';
 export const SIGN_OUT = 'SIGN_OUT';
 export const REQUEST_LOGIN = 'REQUEST_LOGIN';
+export const GET_USERINFO = 'GET_USERINFO';
+export const REQUSET_USERINFO = 'REQUSET_USERINFO';
 
 /**
 |--------------------------------------------------
@@ -59,6 +61,13 @@ export const checkToken = (token) => (dispatch) => {
     data: {
       accesstoken: token,
     }
+  });
+}
+
+export const getUserInfo = (loginname) => (dispatch) => {
+  return dispatch({
+    type: REQUSET_USERINFO,
+    url: api.getUserInfo(loginname)
   });
 }
 
