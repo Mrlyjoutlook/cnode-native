@@ -6,7 +6,10 @@ import {
   CHANGE_TAB,
   GET_TOPIC,
   REQUEST_TOPIC,
-  getTopic
+  getTopic,
+  modal,
+  CLOSEMODAL_PUSH,
+  push
 } from '../actions';
 
 function* watchList({ tab }) {
@@ -39,25 +42,17 @@ function* watchTopic({id}) {
   }
 }
 
-// function* watchCommon() {
-//   try {
-//     const { success, data } = yield put.resolve(getTopic(id));
-//     if (success) {
-//       yield put({ type: `${REQUEST_TOPIC}_OK`, data });
-//     } else {
-//       yield put({ type: `${REQUEST_TOPIC}_FAIL`, data });
-//     }
-//   } catch (e) {
-//       yield put({ type: `${REQUEST_TOPIC}_FAIL`, message: e.message });
-//   }
-// }
-
 function* watchTab(tab) {
   yield put({ type: CHANGE_TAB, tab });
 }
 
+function* closeModalpush({ id }) {
+  yield put(modal({type: '', title: '', open: false}));
+  if (id) yield put(push({ name: 'Topic', params: { id } }));
+}
+
 export default function* appTask() {
   yield takeLatest(GET_LIST, watchList);
-  // yield takeLatest(CHANGE_TAB, watchTab);
   yield takeLatest(GET_TOPIC, watchTopic);
+  yield takeLatest(CLOSEMODAL_PUSH, closeModalpush);
 }

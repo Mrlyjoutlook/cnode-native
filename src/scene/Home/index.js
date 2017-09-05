@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View, Text, Button, TouchableOpacity, StyleSheet, StatusBar, FlatList } from 'react-native';
+import { View, Text, Button, TouchableOpacity, StyleSheet, StatusBar } from 'react-native';
 import ScrollableTabView, { DefaultTabBar } from 'react-native-scrollable-tab-view';
 import { is } from 'immutable';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { GET_LIST, CHANGE_TAB, push } from '../../redux/actions';
-import ListItem from '../../common/ListItem';
+import TabView from '../../common/TabView';
 import Badge from '../../common/Badge';
 import theme from '../../config/styles';
 
@@ -73,7 +73,7 @@ class Home extends Component {
     dispatch({ type:GET_LIST, tab: 'all' });
     navigation.setParams({
       push: this._handleClickNav
-    })
+    });
   }
 
   shouldComponentUpdate(nextProps) {
@@ -129,8 +129,6 @@ class Home extends Component {
     }
   }
 
-  _keyExtractor = (item, index) => item.id;
-
   _renderTabBar = () => <DefaultTabBar />
 
   render() {
@@ -153,36 +151,30 @@ class Home extends Component {
           tabBarTextStyle={{fontSize: 14}} // 字体默认样式
           style={{borderWidth: 0}}
         >
-          <FlatList
+          <TabView
             tabLabel="全部"
             data={listData.get('all').toArray()}
-            keyExtractor={this._keyExtractor}
-            renderItem={({item}) => <ListItem data={item} onPress={this._handleClick} />}
+            click={this._handleClick}
           />
-          <FlatList
+          <TabView
             tabLabel="精华"
             data={listData.get('good').toArray()}
-            keyExtractor={this._keyExtractor}
-            renderItem={({item}) => <ListItem data={item} onPress={this._handleClick} />}
+            click={this._handleClick}
           />
-          <FlatList
+          <TabView
             tabLabel="分享"
             data={listData.get('share').toArray()}
-            keyExtractor={this._keyExtractor}
-            renderItem={({item}) => <ListItem data={item} onPress={this._handleClick} />}
+            click={this._handleClick}
           />
-          <FlatList
+          <TabView
             tabLabel="回答"
             data={listData.get('ask').toArray()}
-            keyExtractor={this._keyExtractor}
-
-            renderItem={({item}) => <ListItem data={item} onPress={this._handleClick} />}
+            click={this._handleClick}
           />
-          <FlatList
+          <TabView
             tabLabel="招聘"
             data={listData.get('job').toArray()}
-            keyExtractor={this._keyExtractor}
-            renderItem={({item}) => <ListItem data={item} onPress={this._handleClick} />}
+            click={this._handleClick}
           />
         </ScrollableTabView>
       </View>

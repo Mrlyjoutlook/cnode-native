@@ -6,12 +6,14 @@ import Home from './scene/Home';
 import Admin from './scene/Admin';
 import Topic from './scene/Topic';
 import Login from './scene/Login';
+import Ceshi from './scene/Ceshi';
 
 const AppNavigator = StackNavigator({
   Home: { screen: Home },
   Admin: { screen: Admin },
   Topic: { path: 'topic/:id', screen: Topic },
-  Login: { screen: Login }
+  Login: { screen: Login },
+  Ceshi: { screen: Ceshi }
 }, {
   headerMode: 'screen',
   transitionConfig: () => {

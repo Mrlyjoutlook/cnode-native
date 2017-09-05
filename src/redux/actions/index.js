@@ -7,6 +7,7 @@ import api from '../../config/api';
 |--------------------------------------------------
 */
 
+export const MODAL = 'MODAL';
 export const COLLECT_APP_ERROR = 'COLLECT_APP_ERROR';
 export const COLLECT_API_ERROR = 'COLLECT_API_ERROR';
 export const SEND_MESSAGE = 'SEND_MESSAGE';
@@ -20,7 +21,7 @@ export const GET_TOPIC = 'GET_TOPIC';
 export const REQUEST_TOPIC = 'REQUEST_TOPIC';
 export const REMEMBER_TOKEN = 'REMEMBER_TOKEN';
 export const SAVE_TOKEN = 'SAVE_TOKEN';
-// export const REQUEST_LIST = 'REQUEST_LIST';
+export const CLOSEMODAL_PUSH = 'CLOSEMODAL_PUSH';
 export const SIGN_IN = 'SIGN_IN';
 export const SIGN_OUT = 'SIGN_OUT';
 export const REQUEST_LOGIN = 'REQUEST_LOGIN';
@@ -60,6 +61,10 @@ export const checkToken = (token) => (dispatch) => {
     }
   });
 }
+
+export const modal = (data) => ({
+  type: MODAL, data
+});
 /**
 |--------------------------------------------------
 | 路由action

@@ -1,11 +1,12 @@
 import React, { PureComponent } from 'react';
-import { View, Text, Image, StyleSheet, TouchableHighlight } from 'react-native';
+import { View, Text, Image, StyleSheet, TouchableHighlight, Dimensions } from 'react-native';
 import { connect } from 'react-redux';
 import Icon from 'react-native-vector-icons/Ionicons';
-import Modal from 'react-native-modalbox';
-import ListInfo from '../../common/ListInfo';
+import { modal } from '../../redux/actions';
 import Badge from '../../common/Badge';
 import theme from '../../config/styles';
+
+const {width, height} = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   image: {
@@ -56,19 +57,17 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  modal: {
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  modal4: {
-    height: 300
-  },
 });
 
 class Admin extends PureComponent {
 
   static navigationOptions = {
     headerTitle: '个人中心',
+    headerLeft: (
+      <View>
+        <Icon name="ios-arrow-back" size={26} style={{marginLeft:10, color: '#fff'}}/>
+      </View>
+    ),
     headerStyle: {
       backgroundColor: theme.backgroundColor,
     },
@@ -77,8 +76,11 @@ class Admin extends PureComponent {
     },
   };
 
-  _onPressItem = () => {
-
+  _onPressItem = (type, title) => {
+    return () => {
+      const { dispatch } = this.props;
+      dispatch(modal({open: true, type, title, }));
+    }
   }
 
   render() {
@@ -101,7 +103,7 @@ class Admin extends PureComponent {
           </View>
         </View>
 
-        <TouchableHighlight onPress={this._onPressItem}>
+        <TouchableHighlight onPress={this._onPressItem('collect', '收藏的话题')}>
           <View style={[styles.column, styles.color_fff]}>
             <View style={styles.column_item}>
               <Icon name="logo-github" size={30} style={{ marginRight: 10 }} />
@@ -113,7 +115,7 @@ class Admin extends PureComponent {
             </View>
           </View>
         </TouchableHighlight>
-        <TouchableHighlight onPress={this._onPressItem}>
+        <TouchableHighlight onPress={this._onPressItem('partake', '最近参与的话题')}>
           <View style={[styles.column, styles.color_fff]}>
             <View style={styles.column_item}>
               <Icon name="logo-github" size={30} style={{ marginRight: 10 }} />
@@ -125,7 +127,7 @@ class Admin extends PureComponent {
             </View>
           </View>
         </TouchableHighlight>
-        <TouchableHighlight onPress={this._onPressItem}>
+        <TouchableHighlight onPress={this._onPressItem('create', '最近创建的话题')}>
           <View style={[styles.column, styles.color_fff]}>
             <View style={styles.column_item}>
               <Icon name="logo-github" size={30} style={{ marginRight: 10 }} />
@@ -140,7 +142,7 @@ class Admin extends PureComponent {
 
         <View style={styles.blak}/>
 
-        <TouchableHighlight onPress={this._onPressItem}>
+        <TouchableHighlight onPress={this._onPressItem()}>
           <View style={[styles.column, styles.color_fff]}>
             <View style={styles.column_item}>
               <Icon name="logo-github" size={30} style={{ marginRight: 10 }} />
@@ -153,28 +155,6 @@ class Admin extends PureComponent {
           </View>
         </TouchableHighlight>
 
-        <Modal
-          isOpen={true}
-          onClosed={() => {}}
-          style={[styles.modal, styles.modal4]}
-          position={"center"}
-        >
-          <ListInfo
-            listData={[{
-              id: "580460a5fdf3bd3d651186d1",
-              last_reply_at: "2016-10-24T04:09:13.002Z",
-              title: "推荐你心中的CNode「极客代言人」，打造《中国技术社群英雄谱》"
-            },{
-              id: "580460a5fdf3bd3d651186d1",
-              last_reply_at: "2016-10-24T04:09:13.002Z",
-              title: "推荐你心中的CNode「极客代言人」，打造《中国技术社群英雄谱》"
-            },{
-              id: "580460a5fdf3bd3d651186d1",
-              last_reply_at: "2016-10-24T04:09:13.002Z",
-              title: "推荐你心中的CNode「极客代言人」，打造《中国技术社群英雄谱》"
-            }]}
-          />
-        </Modal>
       </View>
     );
   }

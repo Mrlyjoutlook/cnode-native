@@ -106,15 +106,6 @@ class Login extends Component {
           />
           <Text style={styles.attach}>cnode by mrlyj</Text>
         </View>
-        <Modal
-          isOpen={true}
-          onClosed={() => {}}
-          style={[styles.modal, styles.modal4]}
-          position={"center"}
-          backdropContent={BContent}
-        >
-          <Text style={styles.text}>Modal with backdrop content</Text>
-        </Modal>
       </View>
     );
   }

@@ -1,5 +1,6 @@
 import { fromJS, Map, List } from 'immutable';
 import {
+  MODAL,
   SEND_MESSAGE,
   CLOSE_MESSAGE,
   COLLECT_APP_ERROR,
@@ -45,6 +46,11 @@ const initialState = fromJS({
     title: '',
     content: '',
     btn: []
+  },
+  modal: {
+    open: false,
+    type: '', // collect, create, partake
+    title: '',
   }
 });
 
@@ -75,6 +81,9 @@ export default function (state = initialState, action) {
     case REQUEST_MODAL_LOAD_STATR:
     case REQUEST_MODAL_LOAD_STOP:
       return state.set('requestLoad', action.type === REQUEST_MODAL_LOAD_STATR ? true : false);
+    case MODAL:
+      const { open, type, title } = action.data;
+      return state.set('modal', Map({ open, type, title }))
     case `${REQUEST_LIST}_LOAD`:
       return state.setIn(['listInfo', 'loading'], true);
     case `${REQUEST_LIST}_OK`:
