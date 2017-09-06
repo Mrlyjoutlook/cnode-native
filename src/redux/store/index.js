@@ -1,10 +1,13 @@
 import { applyMiddleware, compose, createStore } from 'redux';
 import thunk from 'redux-thunk';
 import createSagaMiddleware from 'redux-saga';
-import {autoRehydrate} from 'redux-persist'
+import {autoRehydrate} from 'redux-persist';
+import { composeWithDevTools } from 'remote-redux-devtools';
 import reducers from '../modules';
 import request from '../middleware/requestMiddleware';
 import checkLogin from '../middleware/checkLoginMiddleware';
+
+const composeEnhancers = composeWithDevTools({ realtime: true, port: 5678, hostname: 'localhost' });
 
 export default (initialState = {}) => {
   // create saga middleware
@@ -20,7 +23,7 @@ export default (initialState = {}) => {
   const store = createStore(
     reducers,
     initialState,
-    compose(
+    composeEnhancers(
       applyMiddleware(...middleware),
       ...enhancers,
     ),

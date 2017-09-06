@@ -28,6 +28,7 @@ export const REQUEST_LOGIN = 'REQUEST_LOGIN';
 export const CLEAR_USERINFO = 'CLEAR_USERINFO';
 export const GET_USERINFO = 'GET_USERINFO';
 export const REQUSET_USERINFO = 'REQUSET_USERINFO';
+export const REQUSET_USERINFO_COLLECT = 'REQUSET_USERINFO_COLLECT';
 
 /**
 |--------------------------------------------------
@@ -69,6 +70,13 @@ export const getUserInfo = (loginname) => (dispatch) => {
   return dispatch({
     type: REQUSET_USERINFO,
     url: api.getUserInfo(loginname)
+  });
+}
+
+export const getUserInfoCollect = (loginname) => (dispatch) => {
+  return dispatch({
+    type: REQUSET_USERINFO_COLLECT,
+    url: api.getCollect(loginname)
   });
 }
 

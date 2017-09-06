@@ -141,7 +141,7 @@ class Admin extends PureComponent {
               <Text>收藏的话题</Text>
             </View>
             <View style={styles.column_item}>
-              <Badge text={100} overflowCount={99} />
+              <Badge text={info.get('collect') && info.get('collect').size} overflowCount={99} />
               <Icon name="ios-arrow-forward" size={30} style={{ marginLeft: 10 }} />
             </View>
           </View>

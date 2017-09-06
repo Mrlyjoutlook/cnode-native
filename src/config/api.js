@@ -6,7 +6,7 @@ export default {
   giveAgree: id => `/reply/${id}/ups`, // 点赞
   collect: `/topic_collect/collect`, // 主题收藏
   deCollect: `/topic_collect/de_collect`, // 取消主题收藏
-  getCollect: (id, name) => `/${id}/${name}`, // 所收藏的主题
+  getCollect: (name) => `/topic_collect/${name}`, // 所收藏的主题
   getNoReadMessage: '/message/count', // 获取未读消息
   getMessages: '/messages', // 获取所有消息
 };

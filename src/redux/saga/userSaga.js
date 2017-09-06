@@ -14,7 +14,9 @@ import {
   REQUEST_LOGIN,
   push,
   getUserInfo,
+  getUserInfoCollect,
   REQUSET_USERINFO,
+  REQUSET_USERINFO_COLLECT,
   CLEAR_USERINFO
 } from '../actions';
 
@@ -43,15 +45,27 @@ function* watchLoginOut () {
 
 function* watchUserInfo () {
   try {
-    const info = yield select(state=>state.userState.get('info'));
-    if (!info.get('score')) yield put({ type: REQUEST_MODAL_LOAD_STATR });
-    const { success, data } = yield put.resolve(getUserInfo(info.get('loginname')));
+    const user = yield select(state=>state.userState.get('info'));
+    if (!user.get('score')) yield put({ type: REQUEST_MODAL_LOAD_STATR });
+    const [ info, infoCollect ] = yield all([
+      put.resolve(getUserInfo(user.get('loginname'))),
+      put.resolve(getUserInfoCollect(user.get('loginname')))
+    ]);
     yield put({ type: REQUEST_MODAL_LOAD_STOP });
-    if (success) {
-      yield put({ type: `${REQUSET_USERINFO}_OK`, data });
+    if (info.success || infoCollect.success) {
+      if (info.success && infoCollect.success) {
+        yield all([
+          put({ type: `${REQUSET_USERINFO}_OK`, data: info.data }),
+          put({ type: `${REQUSET_USERINFO_COLLECT}_OK`, data: infoCollect.data }),
+        ]);
+      } else {
+        if (info.success || infoCollect.success) {
+          yield put({ type: `${info.success ? REQUSET_USERINFO : REQUSET_USERINFO_COLLECT}_OK`, data: info.success ? info.data : infoCollect.data });
+        }
+      }
     } else {
       // yield put({ type: `${REQUEST_LOGIN}_FAIL` });
-      yield put({ type: SEND_MESSAGE, content: result.error_msg });
+      yield put({ type: SEND_MESSAGE, content: info.error_msg || infoCollect.error_msg });
     }
   } catch (e) {
     yield put({ type: COLLECT_API_ERROR, error: { message: e.message } });
