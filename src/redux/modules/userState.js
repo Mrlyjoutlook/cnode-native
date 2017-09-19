@@ -5,13 +5,22 @@ import {
   REQUEST_LOGIN,
   REQUSET_USERINFO,
   CLEAR_USERINFO,
-  REQUSET_USERINFO_COLLECT
+  REQUSET_USERINFO_COLLECT,
+  REQUEST_MESSAHE_NOREAD
 } from '../actions';
 
 const initialState = fromJS({
   rememberToken: false,
   accesstoken: '',  //3d926f56-bcee-4333-a18c-736a77638f49
   info: {},
+  noReadMessages: {
+    count: 0,
+    data: [],
+  },
+  readMessages: {
+    count: 0,
+    data: [],
+  }
 });
 
 export default function (state = initialState, action) {
@@ -32,6 +41,8 @@ export default function (state = initialState, action) {
         accesstoken: '',
         info: {},
       });
+    case REQUEST_MESSAHE_NOREAD:
+      return state.update('noReadMessages', data => data.set('count', action.data));
     default:
       return state;
   }

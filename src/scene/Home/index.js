@@ -4,7 +4,7 @@ import { View, Text, Button, TouchableOpacity, StyleSheet, StatusBar } from 'rea
 import ScrollableTabView, { DefaultTabBar } from 'react-native-scrollable-tab-view';
 import { is } from 'immutable';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { GET_LIST, CHANGE_TAB, push } from '../../redux/actions';
+import { GET_LIST, CHANGE_TAB, push, getNoReadMessage } from '../../redux/actions';
 import TabView from '../../common/TabView';
 import Badge from '../../common/Badge';
 import theme from '../../config/styles';
@@ -71,6 +71,7 @@ class Home extends Component {
   componentDidMount() {
     const { dispatch, navigation } = this.props;
     dispatch({ type:GET_LIST, tab: 'all' });
+    dispatch(getNoReadMessage());
     navigation.setParams({
       push: this._handleClickNav
     });

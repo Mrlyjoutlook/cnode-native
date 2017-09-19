@@ -29,6 +29,8 @@ export const CLEAR_USERINFO = 'CLEAR_USERINFO';
 export const GET_USERINFO = 'GET_USERINFO';
 export const REQUSET_USERINFO = 'REQUSET_USERINFO';
 export const REQUSET_USERINFO_COLLECT = 'REQUSET_USERINFO_COLLECT';
+export const REQUEST_MESSAHE_NOREAD = 'REQUEST_MESSAHE_NOREAD';
+export const REQUEST_MESSAHE_ALL = 'REQUEST_MESSAHE_ALL';
 
 /**
 |--------------------------------------------------
@@ -77,6 +79,16 @@ export const getUserInfoCollect = (loginname) => (dispatch) => {
   return dispatch({
     type: REQUSET_USERINFO_COLLECT,
     url: api.getCollect(loginname)
+  });
+}
+
+export const getNoReadMessage = () => (dispatch, getState) => {
+  return dispatch({
+    type: REQUEST_MESSAHE_NOREAD,
+    url: api.getNoReadMessage,
+    params: {
+      accesstoken: getState().userState.get('accesstoken')
+    }
   });
 }
 

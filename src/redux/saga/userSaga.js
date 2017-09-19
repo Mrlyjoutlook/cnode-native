@@ -72,8 +72,17 @@ function* watchUserInfo () {
   }
 }
 
+function* watchMessage () {
+  try {
+
+  } catch (e) {
+
+  }
+}
+
 export default function* userTask() {
   yield takeLatest(SIGN_IN, watchLogin);
   yield takeLatest(SIGN_OUT, watchLoginOut);
   yield takeLatest(GET_USERINFO, watchUserInfo);
+  // yield takeLatest([REQUEST_MESSAHE_NOREAD, REQUEST_MESSAHE_ALL], watchMessage);
 }
