@@ -1,4 +1,6 @@
 import { fromJS, Map, List } from 'immutable';
+import { normalize, schema } from 'normalizr';
+import moment from 'moment';
 import {
   MODAL,
   SEND_MESSAGE,
@@ -12,6 +14,22 @@ import {
   REQUEST_TOPIC
 } from '../actions';
 
+let topic = {
+  id: '',
+  author_id: '',
+  content: '',
+  author: { loginname: '', avatar_url: '' },
+  reply_count: '',
+  visit_count: '',
+  create_at: '',
+  last_reply_at: '',
+  replies: [],
+  good: false,
+  top: false,
+  is_collect: false,
+  tab: ''
+}
+
 const initialState = fromJS({
   listInfo: {
     base: { initialPage: 0, tab: 'all' },
@@ -22,19 +40,15 @@ const initialState = fromJS({
     job: { page: 1, limit: 10, loading: false, },
   },
   listData: {
-    all: [],
-    good: [],
-    share: [],
-    ask: [],
-    job: [],
+    all: { id: [], data: {} },
+    good: { id: [], data: {} },
+    share: { id: [], data: {} },
+    ask: { id: [], data: {} },
+    job: { id: [], data: {} },
   },
-  topic: {
-    content: '',
-    author: { loginname: '', avatar_url: '' },
-    reply_count: '',
-    visit_count: '',
-    create_at: '',
-    replies: []
+  topics: {
+    id: [],
+    data: {}
   },
   requestLoad: false,
   error: {
@@ -87,13 +101,25 @@ export default function (state = initialState, action) {
     case `${REQUEST_LIST}_LOAD`:
       return state.setIn(['listInfo', 'loading'], true);
     case `${REQUEST_LIST}_OK`:
-      return state.setIn(['listData', action.tab], List(action.data))
+      const { data, tab } = action;
+      const topicSchema = new schema.Entity('topics');
+      const topicsSchema = [ topicSchema ];
+      const normalizedData = normalize(data, topicsSchema);
+      return state.setIn(['listData', tab], Map({
+        id: normalizedData.result,
+        data: normalizedData.entities.topics
+      }))
         .setIn(['listInfo', 'loading'], false)
-        .setIn(['listInfo', 'tab'], action.tab);
+        .setIn(['listInfo', 'tab'], tab);
     case CHANGE_TAB:
       return state.setIn(['listInfo', 'base'], Map({ initialPage: action.initialPage, tab: action.tab }));
     case `${REQUEST_TOPIC}_OK`:
-      return state.set('topic', Map(action.data));
+      const { last_reply_at } = action.data;
+      console.log(moment(state.getIn(['listData', tab, 'data'])[action.id]).isSame(last_reply_at));
+      if (!moment(state.getIn(['listData', action.tab, 'data'])[action.id]).isSame(last_reply_at)) {
+        return state.update(['listData', action.tab, 'data'], value => value[id] = data);
+      }
+      return state.update(['listData', action.tab, 'data'], value => value[id] = data);
     default:
       return state;
   }

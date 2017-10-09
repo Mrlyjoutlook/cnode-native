@@ -3,18 +3,21 @@
 	"version": "0.0.1",
 	"private": true,
 	"scripts": {
-    "remotedev": "remotedev --hostname=localhost --port=5678",
+		"remotedev": "remotedev --hostname=localhost --port=5678",
 		"start": "node node_modules/react-native/local-cli/cli.js start",
 		"test": "jest"
 	},
 	"dependencies": {
 		"immutable": "^3.8.1",
+		"lodash": "^4.17.4",
 		"moment": "^2.18.1",
+		"normalizr": "^3.2.3",
 		"react": "16.0.0-alpha.12",
 		"react-native": "^0.47.1",
 		"react-native-htmlview": "^0.12.0",
 		"react-native-modalbox": "^1.4.2",
 		"react-native-scrollable-tab-view": "^0.6.7",
+		"react-native-spinkit": "^1.1.1",
 		"react-native-splash-screen": "^3.0.0",
 		"react-native-vector-icons": "^4.3.0",
 		"react-navigation": "^1.0.0-beta.11",

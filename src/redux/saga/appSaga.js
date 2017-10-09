@@ -29,11 +29,11 @@ function* watchList({ tab }) {
   }
 }
 
-function* watchTopic({id}) {
+function* watchTopic({id, tab}) {
   try {
     const { success, data } = yield put.resolve(getTopic(id));
     if (success) {
-      yield put({ type: `${REQUEST_TOPIC}_OK`, data });
+      yield put({ type: `${REQUEST_TOPIC}_OK`, data, id, tab });
     } else {
       yield put({ type: `${REQUEST_TOPIC}_FAIL`, data });
     }

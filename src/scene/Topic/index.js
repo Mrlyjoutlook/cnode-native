@@ -38,7 +38,7 @@ class Topic extends PureComponent {
     headerLeft: (
       <View>
         <TouchableOpacity onPress={params ? params.back : null}>
-          <Icon name="ios-arrow-back" size={26} style={{marginLeft:10, color: '#fff'}}/>
+          <Icon name="ios-arrow-back" size={26} style={{ marginLeft: 10, color: '#fff' }} />
         </TouchableOpacity>
       </View>
     ),
@@ -69,8 +69,8 @@ class Topic extends PureComponent {
 
   componentDidMount() {
     const { dispatch, navigation } = this.props;
-    const { state: { params: { id } } } = navigation;
-    dispatch({ type: GET_TOPIC, id });
+    const { state: { params: { id, tab } } } = navigation;
+    dispatch({ type: GET_TOPIC, id, tab });
     navigation.setParams({
       back: this._handNavGoBack
     });
@@ -82,36 +82,38 @@ class Topic extends PureComponent {
 
   render() {
     const { loading } = this.state;
-    const { navigation, topic } = this.props;
-    const { title, content, author: { loginname, avatar_url }, reply_count, visit_count, create_at, replies } = topic.toObject();
+    const { navigation, listData } = this.props;
+    const { state: { params: { id, tab } } } = navigation;
+    const { title, content, author: { loginname, avatar_url }, reply_count, visit_count, create_at, replies } = listData.getIn([tab, 'data'])[id];
     return (
       <View>
-        {
-          loading ?
-          <ScrollView>
-            <TopicAuthor
-              name={loginname}
-              imageSrc={avatar_url}
-              reply={reply_count}
-              visit={visit_count}
-              time={create_at}
-            />
-            <View style={styles.title}>
-              <Text style={styles.title_text}>{title}</Text>
-            </View>
-            <HtmlView
-              htmlContent={content}
-            />
-            <View style={styles.article}>
-              <Text>{`${replies.length} 回复`}</Text>
-            </View>
-            <View>
-              {
-                replies.map((item, i) => <Comment key={i} num={i} data={item} />)
-              }
-            </View>
-          </ScrollView> : <Refresh/>
-        }
+        <ScrollView>
+          <TopicAuthor
+            name={loginname}
+            imageSrc={avatar_url}
+            reply={reply_count}
+            visit={visit_count}
+            time={create_at}
+          />
+          <View style={styles.title}>
+            <Text style={styles.title_text}>{title}</Text>
+          </View>
+          {
+            loading ?
+              <HtmlView
+                value={content.replace(/src="\/\//g, 'src="https:')}
+              /> :
+              <Refresh />
+          }
+          <View style={styles.article}>
+            <Text>{`${replies && replies.length} 回复`}</Text>
+          </View>
+          <View>
+            {
+              replies && replies.map((item, i) => <Comment key={i} num={i} data={item} />)
+            }
+          </View>
+        </ScrollView>
       </View>
     );
   }
@@ -119,7 +121,7 @@ class Topic extends PureComponent {
 
 function mapStateToProps(state) {
   return {
-    topic: state.appState.get('topic'),
+    listData: state.appState.get('listData'),
   }
 }
 

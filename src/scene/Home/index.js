@@ -94,10 +94,10 @@ class Home extends Component {
   }
 
   _handleClick = (id) => {
-    const { dispatch } = this.props;
+    const { dispatch, listBase } = this.props;
     dispatch(push({
       name: 'Topic',
-      params: { id }
+      params: { id, tab: listBase.get('tab') }
     }));
   }
 
@@ -154,27 +154,32 @@ class Home extends Component {
         >
           <TabView
             tabLabel="全部"
-            data={listData.get('all').toArray()}
+            data={listData.getIn(['all', 'id'])}
+            source={listData.getIn(['all', 'data'])}
             click={this._handleClick}
           />
           <TabView
             tabLabel="精华"
-            data={listData.get('good').toArray()}
+            data={listData.getIn(['good', 'id'])}
+            source={listData.getIn(['good', 'data'])}
             click={this._handleClick}
           />
           <TabView
             tabLabel="分享"
-            data={listData.get('share').toArray()}
+            data={listData.getIn(['share', 'id'])}
+            source={listData.getIn(['share', 'data'])}
             click={this._handleClick}
           />
           <TabView
             tabLabel="回答"
-            data={listData.get('ask').toArray()}
+            data={listData.getIn(['ask', 'id'])}
+            source={listData.getIn(['ask', 'data'])}
             click={this._handleClick}
           />
           <TabView
             tabLabel="招聘"
-            data={listData.get('job').toArray()}
+            data={listData.getIn(['job', 'id'])}
+            source={listData.getIn(['job', 'data'])}
             click={this._handleClick}
           />
         </ScrollableTabView>
