@@ -1,12 +1,10 @@
 # Cnode Client（App）
 
-> react-native
-
-开发实践都会记录在[石墨文档](https://shimo.im/doc/MD3wcZDlvLsvQCdB?r=P3ER80/「react-native」)
+> 基于react-native技术栈所开发的cnode社区客户端
 
 ## Features
 
-### react natvie
+> react-native
 
 - react-native-htmlview
 -	react-native-modalbox
@@ -14,8 +12,9 @@
 - react-native-splash-screen
 - react-native-vector-icons
 - react-navigation
+- react-native-spinkit
 
-### react
+> react
 
 - react-redux
 - redux
@@ -23,3 +22,12 @@
 - redux-persist-transform-immutable
 - redux-saga
 - redux-thunk
+
+## Task list
+
+> 近期要solve task
+
+- [x] 开发消息页面
+- [x] 优化帖子详情页面
+- [x] 完善列表下拉刷新，上拉加载功能
+- [x] 完成评论功能

@@ -9,7 +9,8 @@ import {
   getTopic,
   modal,
   CLOSEMODAL_PUSH,
-  push
+  push,
+  COLLECT_API_ERROR,
 } from '../actions';
 
 function* watchList({ tab }) {
@@ -24,7 +25,7 @@ function* watchList({ tab }) {
         yield put({ type: `${REQUEST_LIST}_FAIL`, data });
       }
     } catch (e) {
-      // yield put({ type: `${REQUEST_LIST}_FAIL`, message: e.message });
+      yield put({ type: COLLECT_API_ERROR, error: { message: e.message } });
     }
   }
 }

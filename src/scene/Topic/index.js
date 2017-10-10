@@ -3,6 +3,7 @@ import { View, Text, ScrollView, StyleSheet, TouchableOpacity } from 'react-nati
 import { connect } from 'react-redux';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { is } from 'immutable';
+import Spinner from "react-native-spinkit";
 import HtmlView from '../../common/HtmlView';
 import TopicAuthor from '../../common/TopicAuthor';
 import Refresh from '../../common/Refresh';
@@ -24,10 +25,19 @@ const styles = StyleSheet.create({
     color: '#333',
     fontSize: 20,
   },
+  section: {
+    backgroundColor: '#fff'
+  },
   article: {
     paddingTop: 10,
     paddingBottom: 10,
     paddingLeft: 10,
+  },
+  spinner: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 150
   }
 });
 
@@ -44,7 +54,13 @@ class Topic extends PureComponent {
     ),
     headerRight: (
       <View>
-        <Text>收藏</Text>
+        <TouchableOpacity onPress={params ? params.collect : null}>
+          <Icon
+            name={!params.isCollect ? 'ios-heart-outline' : 'ios-heart'}
+            size={24}
+            style={{ marginRight: 12, color: '#fff' }}
+          />
+        </TouchableOpacity>
       </View>
     ),
     headerStyle: {
@@ -61,8 +77,9 @@ class Topic extends PureComponent {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { topic } = nextProps;
-    if (!is(topic, this.props.topic)) {
+    const { listData, navigation } = nextProps;
+    const { state: { params: { tab } } } = navigation;
+    if (!is(listData.getIn([tab, 'data']), this.props.listData.getIn([tab, 'data']))) {
       this.setState({ loading: true });
     }
   }
@@ -72,19 +89,28 @@ class Topic extends PureComponent {
     const { state: { params: { id, tab } } } = navigation;
     dispatch({ type: GET_TOPIC, id, tab });
     navigation.setParams({
-      back: this._handNavGoBack
+      back: this._handleNavGoBack,
+      collect: this._handleCollect,
+      isCollect: false
     });
   }
 
-  _handNavGoBack = () => {
+  _handleNavGoBack = () => {
     this.props.dispatch(goBack());
+  }
+
+  _handleCollect = () => {
+    const { navigation } = this.props;
+    navigation.setParams({
+      isCollect: true
+    });
   }
 
   render() {
     const { loading } = this.state;
     const { navigation, listData } = this.props;
     const { state: { params: { id, tab } } } = navigation;
-    const { title, content, author: { loginname, avatar_url }, reply_count, visit_count, create_at, replies } = listData.getIn([tab, 'data'])[id];
+    const { title, content, author: { loginname, avatar_url }, reply_count, visit_count, create_at, replies } = listData.getIn([tab, 'data', id]);
     return (
       <View>
         <ScrollView>
@@ -99,14 +125,17 @@ class Topic extends PureComponent {
             <Text style={styles.title_text}>{title}</Text>
           </View>
           {
-            loading ?
+            loading &&
+            <View style={styles.section}>
               <HtmlView
-                value={content.replace(/src="\/\//g, 'src="https:')}
-              /> :
-              <Refresh />
+                value={content}
+              />
+            </View>
           }
           <View style={styles.article}>
-            <Text>{`${replies && replies.length} 回复`}</Text>
+            {
+              replies && <Text>{`${replies.length} 回复`}</Text>
+            }
           </View>
           <View>
             {
@@ -114,6 +143,14 @@ class Topic extends PureComponent {
             }
           </View>
         </ScrollView>
+        <View style={styles.spinner}>
+          <Spinner
+            isVisible={!loading}
+            size={40}
+            type="FadingCircle"
+            color="#00bcd4"
+          />
+        </View>
       </View>
     );
   }

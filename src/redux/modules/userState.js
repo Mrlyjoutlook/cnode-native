@@ -11,7 +11,7 @@ import {
 
 const initialState = fromJS({
   rememberToken: false,
-  accesstoken: '',  //3d926f56-bcee-4333-a18c-736a77638f49
+  accesstoken: '3d926f56-bcee-4333-a18c-736a77638f49',  //3d926f56-bcee-4333-a18c-736a77638f49
   info: {},
   noReadMessages: {
     count: 0,

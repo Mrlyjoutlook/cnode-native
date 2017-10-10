@@ -4,7 +4,7 @@ import { View, Text, Button, TouchableOpacity, StyleSheet, StatusBar } from 'rea
 import ScrollableTabView, { DefaultTabBar } from 'react-native-scrollable-tab-view';
 import { is } from 'immutable';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { GET_LIST, CHANGE_TAB, push, getNoReadMessage } from '../../redux/actions';
+import { GET_LIST, CHANGE_TAB, push, REQUEST_MESSAHE_NOREAD } from '../../redux/actions';
 import TabView from '../../common/TabView';
 import Badge from '../../common/Badge';
 import theme from '../../config/styles';
@@ -71,7 +71,7 @@ class Home extends Component {
   componentDidMount() {
     const { dispatch, navigation } = this.props;
     dispatch({ type:GET_LIST, tab: 'all' });
-    dispatch(getNoReadMessage());
+    dispatch({ type:REQUEST_MESSAHE_NOREAD });
     navigation.setParams({
       push: this._handleClickNav
     });
@@ -123,7 +123,7 @@ class Home extends Component {
         break;
     }
     tab.tab = str;
-    if (listData.get(tab.tab).size === 0) {
+    if (listData.getIn([tab.tab, 'id']).size === 0) {
       dispatch({ type:GET_LIST, ...tab });
     } else {
       dispatch({ type:CHANGE_TAB, ...tab });
@@ -192,7 +192,7 @@ function mapStateToProps(state) {
   return {
     listBase: state.appState.getIn(['listInfo', 'base']),
     listInfo: state.appState.get('listInfo'),
-    listData: state.appState.get('listData')
+    listData: state.appState.get('listData'),
   }
 }
 

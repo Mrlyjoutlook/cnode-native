@@ -17,7 +17,10 @@ import {
   getUserInfoCollect,
   REQUSET_USERINFO,
   REQUSET_USERINFO_COLLECT,
-  CLEAR_USERINFO
+  CLEAR_USERINFO,
+  getNoReadMessage,
+  REQUEST_MESSAHE_NOREAD,
+  REQUEST_MESSAHE_ALL,
 } from '../actions';
 
 function* watchLogin ({ data }) {
@@ -30,7 +33,6 @@ function* watchLogin ({ data }) {
       yield put({ type: `${REQUEST_LOGIN}_OK`, data: result });
       yield put(goBack());
     } else {
-      // yield put({ type: `${REQUEST_LOGIN}_FAIL` });
       yield put({ type: SEND_MESSAGE, content: result.error_msg });
     }
   } catch (e) {
@@ -64,7 +66,6 @@ function* watchUserInfo () {
         }
       }
     } else {
-      // yield put({ type: `${REQUEST_LOGIN}_FAIL` });
       yield put({ type: SEND_MESSAGE, content: info.error_msg || infoCollect.error_msg });
     }
   } catch (e) {
@@ -74,9 +75,16 @@ function* watchUserInfo () {
 
 function* watchMessage () {
   try {
-
+    const accesstoken = yield select(state=>state.userState.get('accesstoken'));
+    if (accesstoken) {
+      const { success, data } = yield put.resolve(getNoReadMessage());
+      if (success) {
+        yield put({ type: `${REQUEST_MESSAHE_NOREAD}_OK`, data });
+      }
+    }
   } catch (e) {
-
+    console.log(e);
+    yield put({ type: COLLECT_API_ERROR, error: { message: e.message } });
   }
 }
 
@@ -84,5 +92,5 @@ export default function* userTask() {
   yield takeLatest(SIGN_IN, watchLogin);
   yield takeLatest(SIGN_OUT, watchLoginOut);
   yield takeLatest(GET_USERINFO, watchUserInfo);
-  // yield takeLatest([REQUEST_MESSAHE_NOREAD, REQUEST_MESSAHE_ALL], watchMessage);
+  yield takeLatest([REQUEST_MESSAHE_NOREAD, REQUEST_MESSAHE_ALL], watchMessage);
 }

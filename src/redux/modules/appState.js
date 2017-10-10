@@ -11,24 +11,8 @@ import {
   REQUEST_MODAL_LOAD_STOP,
   REQUEST_LIST,
   CHANGE_TAB,
-  REQUEST_TOPIC
+  REQUEST_TOPIC,
 } from '../actions';
-
-let topic = {
-  id: '',
-  author_id: '',
-  content: '',
-  author: { loginname: '', avatar_url: '' },
-  reply_count: '',
-  visit_count: '',
-  create_at: '',
-  last_reply_at: '',
-  replies: [],
-  good: false,
-  top: false,
-  is_collect: false,
-  tab: ''
-}
 
 const initialState = fromJS({
   listInfo: {
@@ -107,7 +91,7 @@ export default function (state = initialState, action) {
       const normalizedData = normalize(data, topicsSchema);
       return state.setIn(['listData', tab], Map({
         id: normalizedData.result,
-        data: normalizedData.entities.topics
+        data: Map(normalizedData.entities.topics)
       }))
         .setIn(['listInfo', 'loading'], false)
         .setIn(['listInfo', 'tab'], tab);
@@ -115,11 +99,13 @@ export default function (state = initialState, action) {
       return state.setIn(['listInfo', 'base'], Map({ initialPage: action.initialPage, tab: action.tab }));
     case `${REQUEST_TOPIC}_OK`:
       const { last_reply_at } = action.data;
-      console.log(moment(state.getIn(['listData', tab, 'data'])[action.id]).isSame(last_reply_at));
-      if (!moment(state.getIn(['listData', action.tab, 'data'])[action.id]).isSame(last_reply_at)) {
-        return state.update(['listData', action.tab, 'data'], value => value[id] = data);
+      if (!moment(state.getIn(['listData', action.tab, 'data', action.id])).isSame(last_reply_at) ||
+      !state.getIn(['listData', action.tab, 'data', action.id])['replies'] ||
+      !state.getIn(['listData', action.tab, 'data', action.id])['is_collect']
+      ) {
+        return state.setIn(['listData', action.tab, 'data', action.id], action.data);
       }
-      return state.update(['listData', action.tab, 'data'], value => value[id] = data);
+      return state;
     default:
       return state;
   }

@@ -2,16 +2,16 @@ import React, { PropTypes } from 'react';
 import { Dimensions, Image, View, StyleSheet, Text } from 'react-native';
 import RNHtmlView from 'react-native-htmlview';
 
-const screenWidth = Dimensions.get("window").width
+const screenWidth = Dimensions.get("window").width;
 
 function uniqueId(min = 1, max = 10000) {
   var range = max - min
   return min + Math.round(Math.random() * range)
 }
 
-const fontSize = 14
-const rowMargin = 5
-const defaultHtmlStyles = {
+const fontSize = 14;
+const rowMargin = 5;
+const styles = StyleSheet.create({
   image: {
     width: screenWidth - 20,
     height: screenWidth - 20,
@@ -152,37 +152,22 @@ const defaultHtmlStyles = {
     borderLeftColor: '#3498DB',
     borderLeftWidth: 3
   }
-}
+});
 
 class HtmlView extends React.Component {
+
   static propTypes = {
     value: PropTypes.string,
-    style: PropTypes.object,
     maxImageWidth: PropTypes.number
   }
   static defaultProps = {
     maxImageWidth: screenWidth - 20,
-    style: {},
     value: ""
   }
-  constructor(props) {
-    super(props)
-    this._handleLinkPress = this._handleLinkPress.bind(this)
-    this._renderNode = this._renderNode.bind(this)
-    this._onImageLoadEnd = this._onImageLoadEnd.bind(this)
-    this._images = {}
-    const _styles = {}
-    for (let key in defaultHtmlStyles) {
-      if (props.style[key]) {
-        _styles[key] = { ...defaultHtmlStyles[key], ...props.style[key] }
-      } else {
-        _styles[key] = defaultHtmlStyles[key]
-      }
-    }
-    this._styles = StyleSheet.create(_styles)
-  }
 
-  _handleLinkPress(url) {
+  _images = {}
+
+  _handleLinkPress = url => {
     Linking.canOpenURL(url).then(support => {
       if (support) {
         Linking.openURL(url)
@@ -190,7 +175,7 @@ class HtmlView extends React.Component {
     }).catch(err => console.log(err))
   }
 
-  _onImageLoadEnd(uri, index) {
+  _onImageLoadEnd = (uri, index) => {
     const { maxImageWidth } = this.props
     Image.getSize(uri, (w, h) => {
       if (w >= maxImageWidth) {
@@ -206,7 +191,7 @@ class HtmlView extends React.Component {
     }, err => { })
   }
 
-  _renderNode(node, index) {
+  _renderNode = (node, index) => {
     if (node.name == 'iframe') {
       return (
         <View key={'iframe_' + index} style={{ width: 200, height: 200 }}>
@@ -215,11 +200,11 @@ class HtmlView extends React.Component {
       )
     }
     if (node.name === 'img') {
-      const uri = node.attribs.src
+      const uri = 'https:' + node.attribs.src;
       return (
         <Image
           source={{ uri: uri }}
-          style={this._styles.image}
+          style={styles.image}
           resizeMode="center"
           key={'img_' + index}
           onLoadEnd={() => this._onImageLoadEnd(uri, index)}
@@ -229,11 +214,11 @@ class HtmlView extends React.Component {
   }
 
   render() {
-    const { value } = this.props
+    const { value } = this.props;
     return (
       <RNHtmlView
         value={value}
-        stylesheet={this._styles}
+        stylesheet={styles}
         onLinkPress={this._handleLinkPress}
         renderNode={this._renderNode}
       />
