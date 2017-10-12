@@ -53,7 +53,7 @@ class Home extends Component {
     ),
     headerRight: (
       <View style={styles.navRight}>
-        <TouchableOpacity onPress={ params ? params.push('') : null }>
+        <TouchableOpacity onPress={ params ? params.push('News') : null }>
           <Icon name="ios-notifications" size={25} color="#fff" />
         </TouchableOpacity>
         <Badge text={0} overflowCount={99} customStyle={styles.badge} />

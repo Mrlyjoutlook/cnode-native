@@ -4,17 +4,21 @@
 
 ## Features
 
-> react-native
+> native
+
+
+
+> react-native 第三方库或组件
 
 - react-native-htmlview
 -	react-native-modalbox
-- react-native-scrollable-tab-view
+- [react-native-scrollable-tab-view]() 滚动视图组件
 - react-native-splash-screen
 - react-native-vector-icons
-- react-navigation
+- [react-navigation](https://reactnavigation.org/docs/intro/) 页面管理和跳转
 - react-native-spinkit
 
-> react
+> react 技术栈
 
 - react-redux
 - redux
@@ -31,3 +35,8 @@
 - [ ] 优化帖子详情页面
 - [ ] 完善列表下拉刷新，上拉加载功能
 - [ ] 完成评论功能
+- [ ] 国际化
+
+## License
+
+[MIT]()

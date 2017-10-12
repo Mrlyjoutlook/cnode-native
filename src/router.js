@@ -6,6 +6,7 @@ import Home from './scene/Home';
 import Admin from './scene/Admin';
 import Topic from './scene/Topic';
 import Login from './scene/Login';
+import News from './scene/News';
 import Ceshi from './scene/Ceshi';
 
 const AppNavigator = StackNavigator({
@@ -13,6 +14,7 @@ const AppNavigator = StackNavigator({
   Admin: { screen: Admin },
   Topic: { path: 'topic/:id', screen: Topic },
   Login: { screen: Login },
+  News: { screen: News  },
   Ceshi: { screen: Ceshi }
 }, {
   headerMode: 'screen',
