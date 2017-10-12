@@ -9,11 +9,11 @@ import { AppRegistry } from 'react-native';
 import Root from './src';
 
 export default class App extends PureComponent {
-    render() {
-        return (
-            <Root />
-        );
-    }
+  render() {
+    return (
+      <Root />
+    );
+  }
 }
 
 AppRegistry.registerComponent('App', () => App);

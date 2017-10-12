@@ -3,11 +3,11 @@ package com.myappfb;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
-import com.react.rnspinkit.RNSpinkitPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
+import com.react.rnspinkit.RNSpinkitPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.cboy.rn.splashscreen.SplashScreenReactPackage;
 
@@ -28,7 +28,7 @@ public class MainApplication extends Application implements ReactApplication {
           new MainReactPackage(),
           new RNSpinkitPackage(),
           new VectorIconsPackage(),
-          new SplashScreenReactPackage(),
+          new SplashScreenReactPackage()
       );
     }
   };
