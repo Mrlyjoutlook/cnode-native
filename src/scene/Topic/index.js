@@ -87,7 +87,9 @@ class Topic extends PureComponent {
     const { listData, navigation } = nextProps;
     const { state: { params: { tab } } } = navigation;
     if (!is(listData.getIn([tab, 'data']), this.props.listData.getIn([tab, 'data']))) {
-      this.setState({ loading: true });
+      this.setState({ loading: false });
+    } else {
+
     }
   }
 
@@ -164,7 +166,7 @@ class Topic extends PureComponent {
         </ScrollView>
         <View style={styles.spinner}>
           <Spinner
-            isVisible={!loading}
+            isVisible={loading}
             size={40}
             type="FadingCircle"
             color="#00bcd4"
