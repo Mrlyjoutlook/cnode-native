@@ -83,7 +83,6 @@ function* watchMessage () {
       }
     }
   } catch (e) {
-    console.log(e);
     yield put({ type: COLLECT_API_ERROR, error: { message: e.message } });
   }
 }

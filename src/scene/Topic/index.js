@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { is } from 'immutable';
 import Spinner from "react-native-spinkit";
-import HtmlView from '../../common/HtmlView';
+import HtmlRender from '../../ios/HtmlRender';
 import TopicAuthor from '../../common/TopicAuthor';
 import Refresh from '../../common/Refresh';
 import Comment from '../../common/Comment'
@@ -38,7 +38,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 150
-  }
+  },
+  content: {
+    flex: 1,
+    marginTop: 20,
+    marginLeft: 16,
+    marginRight: 16
+  },
 });
 
 class Topic extends PureComponent {
@@ -73,7 +79,8 @@ class Topic extends PureComponent {
   });
 
   state = {
-    loading: false
+    loading: false,
+    htmlHeight: 0,
   }
 
   componentWillReceiveProps(nextProps) {
@@ -106,6 +113,20 @@ class Topic extends PureComponent {
     });
   }
 
+  _layoutDidFinish = (value) => {
+    // console.log('_layoutDidFinish', value);
+    this._htmlHeight = value.height;
+    this.setState({
+      htmlHeight: value.height
+    });
+  }
+
+  _clickUserLink = (value) => {
+    console.log('_clickUserLink', value);
+  }
+
+  // _htmlHeight = 0
+
   render() {
     const { loading } = this.state;
     const { navigation, listData } = this.props;
@@ -124,24 +145,22 @@ class Topic extends PureComponent {
           <View style={styles.title}>
             <Text style={styles.title_text}>{title}</Text>
           </View>
-          {
-            loading &&
-            <View style={styles.section}>
-              <HtmlView
-                value={content}
-              />
-            </View>
-          }
-          <View style={styles.article}>
+          <HtmlRender
+            content={content}
+            onChange={this._layoutDidFinish}
+            onClickUserLink={(value) => this._layoutDidFinish(value)}
+            style={[styles.content, {height: this.state.htmlHeight}]}
+          />
+          {/* <View style={styles.article}>
             {
               replies && <Text>{`${replies.length} 回复`}</Text>
             }
-          </View>
-          <View>
+          </View> */}
+          {/* <View>
             {
               replies && replies.map((item, i) => <Comment key={i} num={i} data={item} />)
             }
-          </View>
+          </View> */}
         </ScrollView>
         <View style={styles.spinner}>
           <Spinner
