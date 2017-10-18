@@ -4,7 +4,10 @@ import { Text, View, StyleSheet, NativeModules, requireNativeComponent } from 'r
 const RCTHtmlView = requireNativeComponent('RCTHtmlView', null);
 const styles = {
   container: {
-    flex: 1
+    flex: 1,
+    marginTop: 20,
+    marginLeft: 16,
+    marginRight: 16
   },
 }
 
@@ -27,10 +30,11 @@ class HtmlRender extends Component {
   }
 
   render(){
+    const { content, style } = this.props;
     return(
       <RCTHtmlView
-        {...this.props}
-        style={[styles.container, this.props.style]}
+        content={content}
+        style={[styles.container, style]}
         onChange={this._onChange}
         onClickUserLink={this._onClickUserLink}
       >

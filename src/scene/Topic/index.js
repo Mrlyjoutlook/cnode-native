@@ -3,11 +3,8 @@ import { View, Text, ScrollView, StyleSheet, TouchableOpacity } from 'react-nati
 import { connect } from 'react-redux';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { is } from 'immutable';
-import Spinner from "react-native-spinkit";
 import HtmlRender from '../../ios/HtmlRender';
 import TopicAuthor from '../../common/TopicAuthor';
-import Refresh from '../../common/Refresh';
-import Comment from '../../common/Comment'
 import theme from '../../config/styles';
 import { GET_TOPIC, goBack } from '../../redux/actions';
 
@@ -33,18 +30,9 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
     paddingLeft: 10,
   },
-  spinner: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 150
-  },
-  content: {
-    flex: 1,
-    marginTop: 20,
-    marginLeft: 16,
-    marginRight: 16
-  },
+  scroll: {
+    backgroundColor: '#fff',
+  }
 });
 
 class Topic extends PureComponent {
@@ -79,17 +67,20 @@ class Topic extends PureComponent {
   });
 
   state = {
-    loading: false,
     htmlHeight: 0,
   }
 
   componentWillReceiveProps(nextProps) {
     const { listData, navigation } = nextProps;
-    const { state: { params: { tab } } } = navigation;
-    if (!is(listData.getIn([tab, 'data']), this.props.listData.getIn([tab, 'data']))) {
-      this.setState({ loading: false });
-    } else {
-
+    const { state: { params: { tab, id } } } = navigation;
+    if (!is(listData.getIn([tab, 'data', id]), this.props.listData.getIn([tab, 'data', id]))) {
+      if (listData.getIn([tab, 'data', id, 'is_collect'])) {
+        navigation.setParams({
+          back: this._handleNavGoBack,
+          collect: this._handleCollect,
+          isCollect: true
+        });
+      }
     }
   }
 
@@ -116,8 +107,6 @@ class Topic extends PureComponent {
   }
 
   _layoutDidFinish = (value) => {
-    // console.log('_layoutDidFinish', value);
-    this._htmlHeight = value.height;
     this.setState({
       htmlHeight: value.height
     });
@@ -127,8 +116,6 @@ class Topic extends PureComponent {
     console.log('_clickUserLink', value);
   }
 
-  // _htmlHeight = 0
-
   render() {
     const { loading } = this.state;
     const { navigation, listData } = this.props;
@@ -136,7 +123,7 @@ class Topic extends PureComponent {
     const { title, content, author: { loginname, avatar_url }, reply_count, visit_count, create_at, replies } = listData.getIn([tab, 'data', id]);
     return (
       <View>
-        <ScrollView>
+        <ScrollView style={styles.scroll}>
           <TopicAuthor
             name={loginname}
             imageSrc={avatar_url}
@@ -149,29 +136,11 @@ class Topic extends PureComponent {
           </View>
           <HtmlRender
             content={content}
-            onChange={this._layoutDidFinish}
-            onClickUserLink={(value) => this._layoutDidFinish(value)}
-            style={[styles.content, {height: this.state.htmlHeight}]}
+            onChange={(value) => this._layoutDidFinish(value)}
+            onClickUserLink={this._clickUserLink}
+            style={{height: this.state.htmlHeight}}
           />
-          {/* <View style={styles.article}>
-            {
-              replies && <Text>{`${replies.length} 回复`}</Text>
-            }
-          </View> */}
-          {/* <View>
-            {
-              replies && replies.map((item, i) => <Comment key={i} num={i} data={item} />)
-            }
-          </View> */}
         </ScrollView>
-        <View style={styles.spinner}>
-          <Spinner
-            isVisible={loading}
-            size={40}
-            type="FadingCircle"
-            color="#00bcd4"
-          />
-        </View>
       </View>
     );
   }

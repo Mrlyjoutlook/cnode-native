@@ -1,4 +1,5 @@
 import { put, select, takeLatest } from 'redux-saga/effects';
+import moment from 'moment';
 import {
   GET_LIST,
   REQUEST_LIST,
@@ -30,7 +31,7 @@ function* watchList({ tab }) {
   }
 }
 
-function* watchTopic({id, tab}) {
+function* watchTopic({id, tab, callback}) {
   try {
     const { success, data } = yield put.resolve(getTopic(id));
     if (success) {
