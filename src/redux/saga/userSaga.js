@@ -16,6 +16,7 @@ import {
   getUserInfo,
   getUserInfoCollect,
   REQUSET_USERINFO,
+  OPERATE_COLLECT,
   REQUSET_USERINFO_COLLECT,
   CLEAR_USERINFO,
   getNoReadMessage,
@@ -23,7 +24,7 @@ import {
   REQUEST_MESSAHE_ALL,
 } from '../actions';
 
-function* watchLogin ({ data }) {
+function* watchLogin({ data }) {
   try {
     yield put({ type: SAVE_TOKEN, data }); // save token
     yield put({ type: REQUEST_MODAL_LOAD_STATR });
@@ -40,12 +41,12 @@ function* watchLogin ({ data }) {
   }
 }
 
-function* watchLoginOut () {
+function* watchLoginOut() {
   yield put({ type: CLEAR_USERINFO });
   yield put(goBack());
 }
 
-function* watchUserInfo () {
+function* watchUserInfo() {
   try {
     const user = yield select(state=>state.userState.get('info'));
     if (!user.get('score')) yield put({ type: REQUEST_MODAL_LOAD_STATR });
@@ -73,7 +74,7 @@ function* watchUserInfo () {
   }
 }
 
-function* watchMessage () {
+function* watchMessage() {
   try {
     const accesstoken = yield select(state=>state.userState.get('accesstoken'));
     if (accesstoken) {
@@ -87,9 +88,18 @@ function* watchMessage () {
   }
 }
 
+function* watchOperateCollect() {
+  try {
+
+  } catch (e) {
+
+  }
+}
+
 export default function* userTask() {
   yield takeLatest(SIGN_IN, watchLogin);
   yield takeLatest(SIGN_OUT, watchLoginOut);
   yield takeLatest(GET_USERINFO, watchUserInfo);
+  yield takeLatest(OPERATE_COLLECT, watchOperateCollect);
   yield takeLatest([REQUEST_MESSAHE_NOREAD, REQUEST_MESSAHE_ALL], watchMessage);
 }

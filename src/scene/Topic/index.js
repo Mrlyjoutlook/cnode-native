@@ -3,12 +3,21 @@ import { View, Text, ScrollView, StyleSheet, TouchableOpacity } from 'react-nati
 import { connect } from 'react-redux';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { is } from 'immutable';
+import Spinner from "react-native-spinkit";
 import HtmlRender from '../../ios/HtmlRender';
 import TopicAuthor from '../../common/TopicAuthor';
+import TopicFunsBlock from '../../common/TopicFunsBlock';
+import Comment from '../../common/Comment';
 import theme from '../../config/styles';
-import { GET_TOPIC, goBack } from '../../redux/actions';
+import { GET_TOPIC, OPERATE_COLLECT, goBack, push } from '../../redux/actions';
 
 const styles = StyleSheet.create({
+  topic: {
+    flex: 1,
+    backgroundColor: 'white',
+    flexDirection: 'column',
+    justifyContent: 'space-between'
+  },
   title: {
     backgroundColor: '#fff',
     justifyContent: 'center',
@@ -32,7 +41,15 @@ const styles = StyleSheet.create({
   },
   scroll: {
     backgroundColor: '#fff',
-  }
+  },
+  spinner: {
+    zIndex: 100,
+    position: 'absolute',
+    left: '50%',
+    marginLeft: -20,
+    top: '50%',
+    marginTop: -20,
+  },
 });
 
 class Topic extends PureComponent {
@@ -43,17 +60,6 @@ class Topic extends PureComponent {
       <View>
         <TouchableOpacity onPress={params ? params.back : null}>
           <Icon name="ios-arrow-back" size={26} style={{ marginLeft: 10, color: '#fff' }} />
-        </TouchableOpacity>
-      </View>
-    ),
-    headerRight: (
-      <View>
-        <TouchableOpacity onPress={params ? params.collect : null}>
-          <Icon
-            name={!params.isCollect ? 'ios-heart-outline' : 'ios-heart'}
-            size={24}
-            style={{ marginRight: 12, color: '#fff' }}
-          />
         </TouchableOpacity>
       </View>
     ),
@@ -68,19 +74,17 @@ class Topic extends PureComponent {
 
   state = {
     htmlHeight: 0,
+    topicBottomType: 'funsblock', // comment or funsblock
+    loading: false,
   }
 
   componentWillReceiveProps(nextProps) {
     const { listData, navigation } = nextProps;
     const { state: { params: { tab, id } } } = navigation;
     if (!is(listData.getIn([tab, 'data', id]), this.props.listData.getIn([tab, 'data', id]))) {
-      if (listData.getIn([tab, 'data', id, 'is_collect'])) {
-        navigation.setParams({
-          back: this._handleNavGoBack,
-          collect: this._handleCollect,
-          isCollect: true
-        });
-      }
+      this.setState({
+        loading: false
+      });
     }
   }
 
@@ -90,20 +94,11 @@ class Topic extends PureComponent {
     dispatch({ type: GET_TOPIC, id, tab });
     navigation.setParams({
       back: this._handleNavGoBack,
-      collect: this._handleCollect,
-      isCollect: false
     });
   }
 
   _handleNavGoBack = () => {
     this.props.dispatch(goBack());
-  }
-
-  _handleCollect = () => {
-    const { navigation } = this.props;
-    navigation.setParams({
-      isCollect: true
-    });
   }
 
   _layoutDidFinish = (value) => {
@@ -116,14 +111,50 @@ class Topic extends PureComponent {
     console.log('_clickUserLink', value);
   }
 
-  render() {
-    const { loading } = this.state;
+  _starEvent = () => {
     const { navigation, listData } = this.props;
     const { state: { params: { id, tab } } } = navigation;
-    const { title, content, author: { loginname, avatar_url }, reply_count, visit_count, create_at, replies } = listData.getIn([tab, 'data', id]);
+    dispatch({ type: OPERATE_COLLECT, id, tab });
+  }
+
+  _wirteEvent = () => {
+    this.setState({
+      topicBottomType: 'comment'
+    });
+  }
+
+  _areaEvent = () => {
+    const { dispatch } = this.props;
+    dispatch(push({
+      name: 'Comment',
+      params: {}
+    }));
+  }
+
+  _refreshEvent = () => {
+    const { dispatch, navigation } = this.props;
+    const { state: { params: { id, tab } } } = navigation;
+    this.setState({
+      loading: true,
+    }, () => {
+      dispatch({ type: GET_TOPIC, id, tab });
+    });
+  }
+
+  _handleBack = () => {
+    this.setState({
+      topicBottomType: 'funsblock'
+    });
+  }
+
+  render() {
+    const { loading, topicBottomType } = this.state;
+    const { navigation, listData } = this.props;
+    const { state: { params: { id, tab } } } = navigation;
+    const { title, content, author: { loginname, avatar_url }, reply_count, visit_count, create_at, replies, is_collect } = listData.getIn([tab, 'data', id]);
     return (
-      <View>
-        <ScrollView style={styles.scroll}>
+      <View style={styles.topic}>
+        <ScrollView>
           <TopicAuthor
             name={loginname}
             imageSrc={avatar_url}
@@ -138,9 +169,30 @@ class Topic extends PureComponent {
             content={content}
             onChange={(value) => this._layoutDidFinish(value)}
             onClickUserLink={this._clickUserLink}
-            style={{height: this.state.htmlHeight}}
+            style={{ height: this.state.htmlHeight }}
           />
         </ScrollView>
+        <View style={styles.spinner}>
+          <Spinner
+            isVisible={loading}
+            size={40}
+            type="FadingCircleAlt"
+            color="#00bcd4"
+          />
+        </View>
+        {
+          topicBottomType === 'comment' ?
+            <Comment
+              back={this._handleBack}
+            /> :
+            <TopicFunsBlock
+              star={is_collect}
+              starEvent={this._starEvent}
+              wirteEvent={this._wirteEvent}
+              areaEvent={this._areaEvent}
+              refreshEvent={this._refreshEvent}
+            />
+        }
       </View>
     );
   }

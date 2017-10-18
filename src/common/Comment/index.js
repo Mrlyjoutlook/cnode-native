@@ -1,80 +1,81 @@
 import React, { Component } from 'react';
-import { View, Text, Image, StyleSheet } from 'react-native';
-import moment from 'moment';
-import HTMLView from 'react-native-htmlview';
+import { View, Text, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 const styles = StyleSheet.create({
-  image: {
-    width: 40,
-    height: 40,
-    borderRadius: 8,
+  comment: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderTopWidth: 1,
+    borderTopColor: '#ccc',
+    paddingTop: '2%',
+    paddingBottom: '2%',
+    paddingLeft: '2%',
+    paddingRight: '2%',
   },
-  content: {
-    backgroundColor: '#fff',
-    paddingTop: 10,
-    paddingBottom: 10,
+  comment_input: {
+    height: 36,
+    width: '85%',
+    borderWidth: 1,
+    borderRadius: 30,
     paddingLeft: 10,
     paddingRight: 10,
-    marginBottom: 10,
+    fontSize: 18,
   },
-  row: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+  comment_send: {
+    width: '15%',
     alignItems: 'center'
-  },
-  proportion_1: {
-    flex: 1,
-  },
-  proportion_4: {
-    flex: 4
-  },
-  top: {
-    alignItems: 'flex-start',
-  },
-  center: {
-    justifyContent: 'center',
-  },
-  simple_row: {
-    flexDirection: 'row',
-  },
-
+  }
 });
 
 class Comment extends Component {
-  state = {  }
+
+  static defaultProps = {
+    star: false,
+  }
+
+  state = {
+    text: '',
+  }
+
+  _handleOnChangeText = (text) => {
+    this.setState({
+      text: text
+    });
+  }
+
+  _send = () => {
+
+  }
+
+  _back = () => {
+    this.props.back();
+  }
+
   render() {
-    const { data, num } = this.props;
+    const { star } = this.props;
+    const { text } = this.state;
     return (
-      <View style={styles.content}>
-        <View style={styles.row}>
-          <View style={[styles.proportion_1, styles.top]}>
-            <Image
-              style={styles.image}
-              { ...data.author ? {source:{ uri: data.author.avatar_url }} : {} }
-            />
-          </View>
-          <View style={styles.proportion_4}>
-            <View style={styles.row}>
-              <Text>{data.author ? data.author.loginname : ''}</Text>
-              <Text>{moment(data.create_at).fromNow()}</Text>
-            </View>
-            <HTMLView
-              value={data.content}
-            />
-          </View>
-        </View>
-        <View style={styles.row}>
-          <Text>{`${num+1}楼`}</Text>
-          <View style={styles.simple_row}>
-            <Icon name="ios-share-alt" size={15} color="#484545">
-              <Text>回复</Text>
-            </Icon>
-            <Icon name="md-thumbs-up" size={15} color="#484545">
-              <Text>点赞</Text>
-              <Text>{data.ups.length}</Text>
-            </Icon>
-          </View>
+      <View style={styles.comment}>
+        <TextInput
+          style={styles.comment_input}
+          multiline={true}
+          placeholder="写评论..."
+          placeholderTextColor="#ccc"
+          underlineColorAndroid="transparent"
+          onChangeText={this._handleOnChangeText}
+          value={text}
+        />
+        <View style={styles.comment_send}>
+          <TouchableOpacity
+            onPress={text ? this._send : this._back}
+          >
+            {
+              text ?
+              <Icon name="ios-send" size={30} style={{ color: '#ccc' }} /> :
+              <Icon name="md-arrow-round-back" size={30} style={{ color: '#ccc' }} />
+            }
+          </TouchableOpacity>
         </View>
       </View>
     );

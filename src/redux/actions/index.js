@@ -29,15 +29,22 @@ export const CLEAR_USERINFO = 'CLEAR_USERINFO';
 export const GET_USERINFO = 'GET_USERINFO';
 export const REQUSET_USERINFO = 'REQUSET_USERINFO';
 export const REQUSET_USERINFO_COLLECT = 'REQUSET_USERINFO_COLLECT';
+export const OPERATE_COLLECT = 'OPERATE_COLLECT';
+export const REQUSET_COLLECT_TOPIC = 'REQUSET_COLLECT_TOPIC';
+export const REQUSET_DECOLLECT_TOPIC = 'REQUSET_DECOLLECT_TOPIC';
 export const REQUEST_MESSAHE_NOREAD = 'REQUEST_MESSAHE_NOREAD';
 export const REQUEST_MESSAHE_ALL = 'REQUEST_MESSAHE_ALL';
 
 /**
 |--------------------------------------------------
-| create action
+| action create
 |--------------------------------------------------
 */
 
+/**
+ * 获取主题列表数据
+ * @param {string} type all 全部 good 精华 shark 分享 ask 回答 job 招聘
+ */
 export const getList = (type = 'all') => (dispatch) => {
   return dispatch({
     type: REQUEST_LIST,
@@ -50,6 +57,10 @@ export const getList = (type = 'all') => (dispatch) => {
   });
 };
 
+/**
+ * 获取帖子详情
+ * @param {string} id
+ */
 export const getTopic = (id) => (dispatch) => {
   return dispatch({
     type: REQUEST_TOPIC,
@@ -68,6 +79,10 @@ export const checkToken = (token) => (dispatch) => {
   });
 }
 
+/**
+ * 获取用户信息
+ * @param {string} loginname 用户名
+ */
 export const getUserInfo = (loginname) => (dispatch) => {
   return dispatch({
     type: REQUSET_USERINFO,
@@ -75,10 +90,30 @@ export const getUserInfo = (loginname) => (dispatch) => {
   });
 }
 
+/**
+ * 获取用户所收藏主题
+ * @param {string} loginname 用户名
+ */
 export const getUserInfoCollect = (loginname) => (dispatch) => {
   return dispatch({
     type: REQUSET_USERINFO_COLLECT,
     url: api.getCollect(loginname)
+  });
+}
+
+/**
+ * 收藏、取消主题
+ * @param {string} type
+ * @param {string} topic_id
+ */
+export const collectTopic = (type, topic_id) => (dispatch) => {
+  return dispatch({
+    type: type === 'c' ? REQUSET_COLLECT_TOPIC : REQUSET_DECOLLECT_TOPIC,
+    url: type === 'c' ? api.collect : api.deCollect,
+    data: {
+      accesstoken: getState().userState.get('accesstoken'),
+      topic_id,
+    }
   });
 }
 
