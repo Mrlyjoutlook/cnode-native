@@ -79,12 +79,12 @@ class ListItem extends PureComponent {
 
   handleOnPress = () => {
     const { data } = this.props;
-    this.props.onPress(data.id);
+    this.props.onPress(data.get('id'));
   }
 
   render() {
     const { data, key } = this.props;
-    const { tab, good, top, author: { avatar_url, loginname }, title, create_at, visit_count, reply_count } = data;
+    const { tab, good, top, author: { avatar_url, loginname }, title, create_at, visit_count, reply_count } = data.toJS();
     return (
       <TouchableHighlight onPress={this.handleOnPress} underlayColor="#ebebeb">
         <View style={styles.content}>

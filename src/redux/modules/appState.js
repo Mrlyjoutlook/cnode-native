@@ -91,9 +91,9 @@ export default function (state = initialState, action) {
       const topicSchema = new schema.Entity('topics');
       const topicsSchema = [ topicSchema ];
       const normalizedData = normalize(data, topicsSchema);
-      return state.setIn(['listData', tab], Map({
+      return state.setIn(['listData', tab], fromJS({
         id: normalizedData.result,
-        data: Map(normalizedData.entities.topics)
+        data: normalizedData.entities.topics
       }))
         .setIn(['listInfo', 'loading'], false)
         .setIn(['listInfo', 'tab'], tab);
@@ -105,14 +105,14 @@ export default function (state = initialState, action) {
       !state.getIn(['listData', action.tab, 'data', action.id])['replies'] ||
       !state.getIn(['listData', action.tab, 'data', action.id])['is_collect']
       ) {
-        return state.setIn(['listData', action.tab, 'data', action.id], action.data);
+        return state.setIn(['listData', action.tab, 'data', action.id], fromJS(action.data));
       }
       return state;
     case `${REQUSET_COLLECT_TOPIC}_OK`:
     case `${REQUSET_DECOLLECT_TOPIC}_OK`:
-      let d = state.getIn(['listData', action.tab, 'data', action.id]);
-      d.is_collect = action.type === `${REQUSET_COLLECT_TOPIC}_OK` ? true :false;
-      return state.setIn(['listData', action.tab, 'data', action.id], d);
+      return state.updateIn(['listData', action.tab, 'data', action.id],
+        data => data.set('is_collect', action.type === `${REQUSET_COLLECT_TOPIC}_OK` ? true :false)
+      );
     default:
       return state;
   }

@@ -61,10 +61,13 @@ export const getList = (type = 'all') => (dispatch) => {
  * 获取帖子详情
  * @param {string} id
  */
-export const getTopic = (id) => (dispatch) => {
+export const getTopic = (id) => (dispatch, getState) => {
   return dispatch({
     type: REQUEST_TOPIC,
     url: api.getTopic(id),
+    params: {
+      accesstoken: getState().userState.get('accesstoken'),
+    }
   });
 }
 

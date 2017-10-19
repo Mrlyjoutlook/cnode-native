@@ -154,31 +154,31 @@ class Home extends Component {
         >
           <TabView
             tabLabel="全部"
-            data={listData.getIn(['all', 'id'])}
+            data={listData.getIn(['all', 'id']).toArray()}
             source={listData.getIn(['all', 'data'])}
             click={this._handleClick}
           />
           <TabView
             tabLabel="精华"
-            data={listData.getIn(['good', 'id'])}
+            data={listData.getIn(['good', 'id']).toArray()}
             source={listData.getIn(['good', 'data'])}
             click={this._handleClick}
           />
           <TabView
             tabLabel="分享"
-            data={listData.getIn(['share', 'id'])}
+            data={listData.getIn(['share', 'id']).toArray()}
             source={listData.getIn(['share', 'data'])}
             click={this._handleClick}
           />
           <TabView
             tabLabel="回答"
-            data={listData.getIn(['ask', 'id'])}
+            data={listData.getIn(['ask', 'id']).toArray()}
             source={listData.getIn(['ask', 'data'])}
             click={this._handleClick}
           />
           <TabView
             tabLabel="招聘"
-            data={listData.getIn(['job', 'id'])}
+            data={listData.getIn(['job', 'id']).toArray()}
             source={listData.getIn(['job', 'data'])}
             click={this._handleClick}
           />

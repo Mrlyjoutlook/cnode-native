@@ -112,7 +112,7 @@ class Topic extends Component {
   }
 
   _starEvent = () => {
-    const { dispatch, navigation, listData } = this.props;
+    const { dispatch, navigation } = this.props;
     const { state: { params: { id, tab } } } = navigation;
     dispatch({ type: OPERATE_COLLECT, id, tab });
   }
@@ -151,8 +151,7 @@ class Topic extends Component {
     const { loading, topicBottomType } = this.state;
     const { navigation, listData } = this.props;
     const { state: { params: { id, tab } } } = navigation;
-    const { title, content, author: { loginname, avatar_url }, reply_count, visit_count, create_at, replies, is_collect } = listData.getIn([tab, 'data', id]);
-    console.log('is_collect',is_collect);
+    const { title, content, author: { loginname, avatar_url }, reply_count, visit_count, create_at, replies, is_collect } = listData.getIn([tab, 'data', id]).toJS();
     return (
       <View style={styles.topic}>
         <ScrollView>
