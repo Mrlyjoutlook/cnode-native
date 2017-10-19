@@ -45,6 +45,7 @@ export default ({ dispatch, getState }) => (next) => (action) => {
         headers,
       });
       let responseJson = await response.json();
+      console.log('url', url, 'response', responseJson);
       return responseJson;
     } catch(error) {
       dispatch({ type: 'COLLECT_APP_ERROR', error: { message: error } });

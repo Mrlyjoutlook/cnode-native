@@ -18,10 +18,13 @@ import {
   REQUSET_USERINFO,
   OPERATE_COLLECT,
   REQUSET_USERINFO_COLLECT,
+  REQUSET_COLLECT_TOPIC,
+  REQUSET_DECOLLECT_TOPIC,
   CLEAR_USERINFO,
   getNoReadMessage,
   REQUEST_MESSAHE_NOREAD,
   REQUEST_MESSAHE_ALL,
+  collectTopic,
 } from '../actions';
 
 function* watchLogin({ data }) {
@@ -88,11 +91,16 @@ function* watchMessage() {
   }
 }
 
-function* watchOperateCollect() {
+function* watchOperateCollect({id, tab}) {
   try {
-
+    const data = yield select(state => state.appState.getIn(['listData', tab, 'data', id]));
+    const type = !data.is_collect ? 'c' : 'd';
+    const { success } = yield put.resolve(collectTopic(type, id));
+    if (success) {
+      yield put({ type: `${!data.is_collect ? REQUSET_COLLECT_TOPIC : REQUSET_DECOLLECT_TOPIC}_OK`, id, tab });
+    }
   } catch (e) {
-
+    yield put({ type: COLLECT_API_ERROR, error: { message: e.message } });
   }
 }
 

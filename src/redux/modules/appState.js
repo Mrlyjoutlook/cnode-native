@@ -12,6 +12,8 @@ import {
   REQUEST_LIST,
   CHANGE_TAB,
   REQUEST_TOPIC,
+  REQUSET_COLLECT_TOPIC,
+  REQUSET_DECOLLECT_TOPIC,
 } from '../actions';
 
 const initialState = fromJS({
@@ -106,6 +108,11 @@ export default function (state = initialState, action) {
         return state.setIn(['listData', action.tab, 'data', action.id], action.data);
       }
       return state;
+    case `${REQUSET_COLLECT_TOPIC}_OK`:
+    case `${REQUSET_DECOLLECT_TOPIC}_OK`:
+      let d = state.getIn(['listData', action.tab, 'data', action.id]);
+      d.is_collect = action.type === `${REQUSET_COLLECT_TOPIC}_OK` ? true :false;
+      return state.setIn(['listData', action.tab, 'data', action.id], d);
     default:
       return state;
   }

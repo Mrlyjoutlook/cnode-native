@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import { View, Text, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
   },
 });
 
-class Topic extends PureComponent {
+class Topic extends Component {
 
   static navigationOptions = ({ navigation: { navigate, state: { params } } }) => ({
     headerTitle: '详情',
@@ -78,6 +78,15 @@ class Topic extends PureComponent {
     loading: false,
   }
 
+  componentDidMount() {
+    const { dispatch, navigation } = this.props;
+    const { state: { params: { id, tab } } } = navigation;
+    dispatch({ type: GET_TOPIC, id, tab });
+    navigation.setParams({
+      back: this._handleNavGoBack,
+    });
+  }
+
   componentWillReceiveProps(nextProps) {
     const { listData, navigation } = nextProps;
     const { state: { params: { tab, id } } } = navigation;
@@ -86,15 +95,6 @@ class Topic extends PureComponent {
         loading: false
       });
     }
-  }
-
-  componentDidMount() {
-    const { dispatch, navigation } = this.props;
-    const { state: { params: { id, tab } } } = navigation;
-    dispatch({ type: GET_TOPIC, id, tab });
-    navigation.setParams({
-      back: this._handleNavGoBack,
-    });
   }
 
   _handleNavGoBack = () => {
@@ -112,7 +112,7 @@ class Topic extends PureComponent {
   }
 
   _starEvent = () => {
-    const { navigation, listData } = this.props;
+    const { dispatch, navigation, listData } = this.props;
     const { state: { params: { id, tab } } } = navigation;
     dispatch({ type: OPERATE_COLLECT, id, tab });
   }
@@ -152,6 +152,7 @@ class Topic extends PureComponent {
     const { navigation, listData } = this.props;
     const { state: { params: { id, tab } } } = navigation;
     const { title, content, author: { loginname, avatar_url }, reply_count, visit_count, create_at, replies, is_collect } = listData.getIn([tab, 'data', id]);
+    console.log('is_collect',is_collect);
     return (
       <View style={styles.topic}>
         <ScrollView>

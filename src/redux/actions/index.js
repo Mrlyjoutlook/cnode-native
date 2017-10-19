@@ -106,10 +106,11 @@ export const getUserInfoCollect = (loginname) => (dispatch) => {
  * @param {string} type
  * @param {string} topic_id
  */
-export const collectTopic = (type, topic_id) => (dispatch) => {
+export const collectTopic = (t, topic_id) => (dispatch, getState) => {
   return dispatch({
-    type: type === 'c' ? REQUSET_COLLECT_TOPIC : REQUSET_DECOLLECT_TOPIC,
-    url: type === 'c' ? api.collect : api.deCollect,
+    type: t === 'c' ? REQUSET_COLLECT_TOPIC : REQUSET_DECOLLECT_TOPIC,
+    method: "POST",
+    url: t === 'c' ? api.collect : api.deCollect,
     data: {
       accesstoken: getState().userState.get('accesstoken'),
       topic_id,
