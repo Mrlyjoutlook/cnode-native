@@ -4,34 +4,39 @@ import Icon from 'react-native-vector-icons/Ionicons';
 
 const styles = StyleSheet.create({
   comment: {
+    backgroundColor: '#fff',
+    height: 56,
+    borderTopColor: '#DCDCDC',
+    borderTopWidth: StyleSheet.hairlineWidth,
+    shadowColor: 'black',
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.5,
+    shadowRadius: 2,
     flexDirection: 'row',
-    alignItems: 'center',
-    borderTopWidth: 1,
-    borderTopColor: '#ccc',
-    paddingTop: '2%',
-    paddingBottom: '2%',
-    paddingLeft: '2%',
-    paddingRight: '2%',
+    justifyContent: 'space-around',
+    alignItems: 'center'
   },
   comment_input: {
     height: 36,
-    width: '85%',
-    borderWidth: 1,
+    width: '80%',
+    borderColor: '#DCDCDC',
+    borderWidth: 2,
     borderRadius: 30,
     paddingLeft: 10,
     paddingRight: 10,
     fontSize: 18,
   },
   comment_send: {
-    width: '15%',
-    alignItems: 'center'
+    alignItems: 'center',
+    marginRight: 10,
   }
 });
 
 class Comment extends Component {
 
   static defaultProps = {
-    star: false,
+    placeholder: '请输入',
+    back: () => {},
   }
 
   state = {
@@ -53,14 +58,14 @@ class Comment extends Component {
   }
 
   render() {
-    const { star } = this.props;
+    const { placeholder } = this.props;
     const { text } = this.state;
     return (
       <View style={styles.comment}>
         <TextInput
           style={styles.comment_input}
           multiline={true}
-          placeholder="写评论..."
+          placeholder={placeholder}
           placeholderTextColor="#ccc"
           underlineColorAndroid="transparent"
           onChangeText={this._handleOnChangeText}

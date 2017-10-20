@@ -131,6 +131,10 @@ export const getNoReadMessage = () => (dispatch, getState) => {
   });
 }
 
+/**
+ *
+ * @param {any} data
+ */
 export const modal = (data) => ({
   type: MODAL, data
 });
