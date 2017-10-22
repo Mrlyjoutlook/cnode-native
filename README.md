@@ -4,6 +4,10 @@
 
 UI这一块是边开发边整理的，不好看别见怪，等有时间再花心思搞漂亮点。
 
+## gif 效果图
+
+![gif](https://github.com/Mrlyjoutlook/cnode-native/blob/master/doc/QQ20171022-213440.gif)
+
 ## Features
 
 > native
