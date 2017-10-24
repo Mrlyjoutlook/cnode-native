@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { View, Text, Image, StyleSheet } from 'react-native';
+import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import moment from 'moment';
+import { is } from 'immutable';
 import HTMLView from 'react-native-htmlview';
 import Icon from 'react-native-vector-icons/Ionicons';
 import theme from '../../config/styles';
@@ -54,6 +55,22 @@ const styles = StyleSheet.create({
 });
 
 class CommentBlock extends Component {
+
+  shouldComponentUpdate(nextProps, nextState) {
+    const { data, num } = nextProps;
+    return !is(data, this.props.data) || num !== this.props;
+  }
+
+  _handleComment = () => {
+    const { data, commentEvent } = this.props;
+    commentEvent(data.getIn(['author', 'loginname']), data.get(['id']));
+  }
+
+  _handleAgress = () => {
+    const { data, agressEvent } = this.props;
+    agressEvent(data.get('id'));
+  }
+
   render() {
     const { data, num } = this.props;
     const { author, create_at, content, ups } = data.toObject();
@@ -69,7 +86,7 @@ class CommentBlock extends Component {
         <View style={styles.content_right}>
           <View style={styles.right_top}>
             <Text style={styles.color_ccc}>{author ? loginname : ''}</Text>
-            <Text styles={styles.color_max}>{`${num+1}楼`}</Text>
+            <Text style={styles.color_max}>{`${num+1}楼`}</Text>
           </View>
           <View style={styles.right_middle}>
             <HTMLView value={content}/>
@@ -77,13 +94,17 @@ class CommentBlock extends Component {
           <View style={styles.right_bottom}>
             <Text style={styles.color_ccc}>{moment(create_at).fromNow()}</Text>
             <View style={styles.func_row}>
-              <Icon name="ios-share-alt" size={15} color="#484545">
-                <Text>回复</Text>
-              </Icon>
-              <Icon name="md-thumbs-up" size={15} color="#484545">
-                <Text>点赞</Text>
-                <Text>{ups.length}</Text>
-              </Icon>
+              <TouchableOpacity onPress={this._handleComment}>
+                <Icon name="ios-share-alt" size={15} color="#484545">
+                  <Text>回复</Text>
+                </Icon>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={this._handleAgress}>
+                <Icon name="md-thumbs-up" size={15} color="#484545">
+                  <Text>点赞</Text>
+                  <Text>{ups.length}</Text>
+                </Icon>
+              </TouchableOpacity>
             </View>
           </View>
         </View>

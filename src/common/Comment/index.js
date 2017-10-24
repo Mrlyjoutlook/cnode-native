@@ -37,10 +37,21 @@ class Comment extends Component {
   static defaultProps = {
     placeholder: '请输入',
     back: () => {},
+    _send: () => {},
+    text: '',
   }
 
   state = {
-    text: '',
+    text: this.props.text,
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { text } = nextProps;
+    if (text !== this.props.text) {
+      this.setState({
+        text: text
+      });
+    }
   }
 
   _handleOnChangeText = (text) => {
@@ -50,7 +61,8 @@ class Comment extends Component {
   }
 
   _send = () => {
-
+    const { text } = this.state;
+    this.props.send(text);
   }
 
   _back = () => {
@@ -60,6 +72,7 @@ class Comment extends Component {
   render() {
     const { placeholder } = this.props;
     const { text } = this.state;
+
     return (
       <View style={styles.comment}>
         <TextInput

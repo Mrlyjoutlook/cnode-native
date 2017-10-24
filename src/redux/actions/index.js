@@ -7,31 +7,44 @@ import api from '../../config/api';
 |--------------------------------------------------
 */
 
+// 弹窗界面
 export const MODAL = 'MODAL';
+// 收集app和api错误
 export const COLLECT_APP_ERROR = 'COLLECT_APP_ERROR';
 export const COLLECT_API_ERROR = 'COLLECT_API_ERROR';
+// 全局弹框信息
 export const SEND_MESSAGE = 'SEND_MESSAGE';
 export const CLOSE_MESSAGE = 'CLOSE_MESSAGE';
+// 开启loading框
 export const REQUEST_MODAL_LOAD_STATR = 'REQUEST_MODAL_LOAD_STATR';
 export const REQUEST_MODAL_LOAD_STOP = 'REQUEST_MODAL_LOAD_STOP';
+// 首页列表
 export const GET_LIST = 'GET_LIST';
 export const REQUEST_LIST = 'REQUEST_LIST';
 export const CHANGE_TAB = 'CHANGE_TAB';
+// 主题详情
 export const GET_TOPIC = 'GET_TOPIC';
 export const REQUEST_TOPIC = 'REQUEST_TOPIC';
+// 登录
 export const REMEMBER_TOKEN = 'REMEMBER_TOKEN';
 export const SAVE_TOKEN = 'SAVE_TOKEN';
 export const CLOSEMODAL_PUSH = 'CLOSEMODAL_PUSH';
 export const SIGN_IN = 'SIGN_IN';
 export const SIGN_OUT = 'SIGN_OUT';
 export const REQUEST_LOGIN = 'REQUEST_LOGIN';
+// 用户信息
 export const CLEAR_USERINFO = 'CLEAR_USERINFO';
 export const GET_USERINFO = 'GET_USERINFO';
 export const REQUSET_USERINFO = 'REQUSET_USERINFO';
 export const REQUSET_USERINFO_COLLECT = 'REQUSET_USERINFO_COLLECT';
+// 收藏主题功能
 export const OPERATE_COLLECT = 'OPERATE_COLLECT';
 export const REQUSET_COLLECT_TOPIC = 'REQUSET_COLLECT_TOPIC';
 export const REQUSET_DECOLLECT_TOPIC = 'REQUSET_DECOLLECT_TOPIC';
+// 点赞、回复
+export const REQUEST_AGRESS = 'REQUEST_AGRESS';
+export const REQUEST_COMMENT = 'REQUEST_COMMENT';
+// 消息
 export const REQUEST_MESSAHE_NOREAD = 'REQUEST_MESSAHE_NOREAD';
 export const REQUEST_MESSAHE_ALL = 'REQUEST_MESSAHE_ALL';
 
@@ -71,6 +84,10 @@ export const getTopic = (id) => (dispatch, getState) => {
   });
 }
 
+/**
+ * 校验token
+ * @param {string} token
+ */
 export const checkToken = (token) => (dispatch) => {
   return dispatch({
     type: REQUEST_LOGIN,
@@ -127,6 +144,40 @@ export const getNoReadMessage = () => (dispatch, getState) => {
     url: api.getNoReadMessage,
     params: {
       accesstoken: getState().userState.get('accesstoken')
+    }
+  });
+}
+
+/**
+ * 点赞
+ * @param {string} id
+ */
+export const agress = (reply_id)  => (dispatch, getState) => {
+  return dispatch({
+    type: REQUEST_AGRESS,
+    method: "POST",
+    url: api.agree(reply_id),
+    data: {
+      accesstoken: getState().userState.get('accesstoken')
+    }
+  });
+}
+
+/**
+ * 评论
+ * @param {string} topic_id
+ * @param {string} text
+ * @param {string} reply_id
+ */
+export const launchCmment = (topic_id, text, reply_id) => () => {
+  return dispatch({
+    type: REQUEST_COMMENT,
+    method: 'POST',
+    url: api.comment(topic_id),
+    data: {
+      accesstoken: getState().userState.get('accesstoken'),
+      content: text,
+      reply_id
     }
   });
 }

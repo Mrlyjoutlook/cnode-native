@@ -5,7 +5,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import CommentBlock from '../../common/CommentBlock';
 import Comment from '../../common/Comment';
 import theme from '../../config/styles';
-import { goBack, push } from '../../redux/actions';
+import { goBack, push, agress, launchCmment, REQUEST_COMMENT } from '../../redux/actions';
 
 const styles = StyleSheet.create({
   comment: {
@@ -35,6 +35,12 @@ class CommentPage extends Component {
     },
   });
 
+  state = {
+    commentOpen: false,
+    commentWho: '',
+    commentId: '',
+  }
+
   componentDidMount() {
     const { dispatch, navigation } = this.props;
     const { state: { params: { id, tab } } } = navigation;
@@ -47,10 +53,40 @@ class CommentPage extends Component {
     this.props.dispatch(goBack());
   }
 
+  _commentEvent = (name, id) => {
+    const { commentWho } = this.state;
+    if (commentWho !== `@${name} `) {
+      this.setState({
+        commentOpen: true,
+        commentWho: `@${name} `,
+        commentId: id,
+      });
+    }
+  }
+
+  _agressEvent = (id) => {
+    agress(id);
+  }
+
+  _closeComment = () => {
+    this.setState({
+      commentOpen: false,
+    });
+  }
+
+  _sendCommont = (text) => {
+    const { commentId } = this.state;
+    const { dispatch, navigation } = this.props;
+    const { state: { params: { id } } } = navigation;
+    dispatch({ type: REQUEST_COMMENT, id, text, commentId });
+  }
+
   render() {
     const { navigation, listData } = this.props;
+    const { commentWho, commentOpen } = this.state;
     const { state: { params: { id, tab } } } = navigation;
     const replies = listData.getIn([tab, 'data', id, 'replies']).toArray();
+
     return (
       <View style={styles.comment}>
         <ScrollView>
@@ -60,11 +96,21 @@ class CommentPage extends Component {
                 key={i}
                 num={i}
                 data={item}
+                commentEvent={this._commentEvent}
+                agressEvent={this._agressEvent}
               />
             )
           }
         </ScrollView>
-        <Comment/>
+        {
+          commentOpen && (
+            <Comment
+              text={commentWho}
+              send={this._sendCommont}
+              back={this._closeComment}
+            />
+          )
+        }
       </View>
     );
   }
