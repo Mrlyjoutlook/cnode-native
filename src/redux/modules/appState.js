@@ -14,6 +14,7 @@ import {
   REQUEST_TOPIC,
   REQUSET_COLLECT_TOPIC,
   REQUSET_DECOLLECT_TOPIC,
+  REQUEST_AGRESS,
 } from '../actions';
 
 const initialState = fromJS({
@@ -111,8 +112,15 @@ export default function (state = initialState, action) {
     case `${REQUSET_COLLECT_TOPIC}_OK`:
     case `${REQUSET_DECOLLECT_TOPIC}_OK`:
       return state.updateIn(['listData', action.tab, 'data', action.id],
-        data => data.set('is_collect', action.type === `${REQUSET_COLLECT_TOPIC}_OK` ? true :false)
+        data => data.set('is_collect', action.type === `${REQUSET_COLLECT_TOPIC}_OK` ? true : false)
       );
+    case `${REQUEST_AGRESS}_OK`:
+      if (action.action === 'up') {
+        return state.updateIn(['listData', action.tab, 'data', action.topic_id, 'replies', action.num, 'ups'], data => data.push(action.author_id));
+      }
+      if (action.action === 'down') {
+        return state.updateIn(['listData', action.tab, 'data', action.topic_id, 'replies', action.num, 'ups'], data => data.delete(action.author_id));
+      }
     default:
       return state;
   }

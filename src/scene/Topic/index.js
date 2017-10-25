@@ -9,7 +9,7 @@ import TopicAuthor from '../../common/TopicAuthor';
 import TopicFunsBlock from '../../common/TopicFunsBlock';
 import Comment from '../../common/Comment';
 import theme from '../../config/styles';
-import { GET_TOPIC, OPERATE_COLLECT, goBack, push } from '../../redux/actions';
+import { GET_TOPIC, OPERATE_COLLECT, REQUEST_COMMENT, goBack, push } from '../../redux/actions';
 
 const styles = StyleSheet.create({
   topic: {
@@ -148,6 +148,12 @@ class Topic extends Component {
     });
   }
 
+  _sendComment = (text) => {
+    const { dispatch, navigation } = this.props;
+    const { state: { params: { id } } } = navigation;
+    dispatch({ type: REQUEST_COMMENT, id, text });
+  }
+
   render() {
     const { loading, topicBottomType } = this.state;
     const { navigation, listData } = this.props;
@@ -185,6 +191,7 @@ class Topic extends Component {
           topicBottomType === 'comment' ?
             <Comment
               back={this._handleBack}
+              send={this._sendComment}
             /> :
             <TopicFunsBlock
               star={is_collect}

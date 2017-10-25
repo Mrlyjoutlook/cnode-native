@@ -5,7 +5,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import CommentBlock from '../../common/CommentBlock';
 import Comment from '../../common/Comment';
 import theme from '../../config/styles';
-import { goBack, push, agress, launchCmment, REQUEST_COMMENT } from '../../redux/actions';
+import { goBack, push, agress, launchCmment, REQUEST_COMMENT, REQUEST_AGRESS } from '../../redux/actions';
 
 const styles = StyleSheet.create({
   comment: {
@@ -64,8 +64,10 @@ class CommentPage extends Component {
     }
   }
 
-  _agressEvent = (id) => {
-    agress(id);
+  _agressEvent = (reply_id, num) => {
+    const { dispatch, navigation } = this.props;
+    const { state: { params: { id, tab } } } = navigation;
+    dispatch({ type: REQUEST_AGRESS, topic_id: id, reply_id, tab, num });
   }
 
   _closeComment = () => {
@@ -78,7 +80,14 @@ class CommentPage extends Component {
     const { commentId } = this.state;
     const { dispatch, navigation } = this.props;
     const { state: { params: { id } } } = navigation;
-    dispatch({ type: REQUEST_COMMENT, id, text, commentId });
+    const callback = () => {
+      this.setState({
+        commentOpen: false,
+        commentWho: '',
+        commentId: '',
+      });
+    }
+    dispatch({ type: REQUEST_COMMENT, id, text, commentId, callback });
   }
 
   render() {

@@ -67,8 +67,8 @@ class CommentBlock extends Component {
   }
 
   _handleAgress = () => {
-    const { data, agressEvent } = this.props;
-    agressEvent(data.get('id'));
+    const { data, agressEvent, num } = this.props;
+    agressEvent(data.get('id'), num);
   }
 
   render() {
@@ -102,7 +102,7 @@ class CommentBlock extends Component {
               <TouchableOpacity onPress={this._handleAgress}>
                 <Icon name="md-thumbs-up" size={15} color="#484545">
                   <Text>点赞</Text>
-                  <Text>{ups.length}</Text>
+                  <Text>{ups.size}</Text>
                 </Icon>
               </TouchableOpacity>
             </View>

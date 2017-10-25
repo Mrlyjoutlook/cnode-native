@@ -12,7 +12,9 @@ import {
 const initialState = fromJS({
   rememberToken: false,
   accesstoken: '3d926f56-bcee-4333-a18c-736a77638f49',  //3d926f56-bcee-4333-a18c-736a77638f49
-  info: {},
+  info: {
+    id: 'e21e2efeawd5453545'
+  },
   noReadMessages: {
     count: 0,
     data: [

@@ -123,8 +123,8 @@ export const getUserInfoCollect = (loginname) => (dispatch) => {
 
 /**
  * 收藏、取消主题
- * @param {string} type
- * @param {string} topic_id
+ * @param {string} type 类型、c收藏、d取消
+ * @param {string} topic_id 主题id
  */
 export const collectTopic = (t, topic_id) => (dispatch, getState) => {
   return dispatch({
@@ -138,6 +138,9 @@ export const collectTopic = (t, topic_id) => (dispatch, getState) => {
   });
 }
 
+/**
+ * 获取未读消息
+ */
 export const getNoReadMessage = () => (dispatch, getState) => {
   return dispatch({
     type: REQUEST_MESSAHE_NOREAD,
@@ -150,7 +153,7 @@ export const getNoReadMessage = () => (dispatch, getState) => {
 
 /**
  * 点赞
- * @param {string} id
+ * @param {string} id 点赞对象的id
  */
 export const agress = (reply_id)  => (dispatch, getState) => {
   return dispatch({
@@ -165,20 +168,19 @@ export const agress = (reply_id)  => (dispatch, getState) => {
 
 /**
  * 评论
- * @param {string} topic_id
- * @param {string} text
- * @param {string} reply_id
+ * @param {string} topic_id 主题id
+ * @param {string} text 评价的内容
+ * @param {string} reply_id 回复某个对象的id
  */
-export const launchCmment = (topic_id, text, reply_id) => () => {
+export const launchCmment = (topic_id, text, reply_id) => (dispatch, getState) => {
   return dispatch({
     type: REQUEST_COMMENT,
     method: 'POST',
     url: api.comment(topic_id),
-    data: {
+    data: Object.assign({
       accesstoken: getState().userState.get('accesstoken'),
       content: text,
-      reply_id
-    }
+    }, reply_id ? { reply_id } : {}),
   });
 }
 
